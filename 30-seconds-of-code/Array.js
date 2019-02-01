@@ -206,6 +206,15 @@ const findLastIndex = (arr, fn) => arr.map((val, i) => [i, val]).filter(([i, val
 consoleLog(findLastIndex.bind(null, [1, 2, 3, 4, 5], n => n % 2 === 1)); // 4
 
 /**
+ * tail: 返回除了第一个值的数组
+ * params: arr
+ * return: []
+ */
+const tail = arr => arr.length > 1 ? arr.slice(1) : arr;
+
+consoleLog(tail.bind(null, [1, 2, 3])); // [ 2, 3 ]
+
+/**
  * forEachRight: 反向forEach
  * params: arr, fn
  * return: 反向求值后的结果
@@ -261,3 +270,21 @@ const reduceWhich = (arr, comparator = (a, b) => a - b) => arr.reduce((a, b) => 
 consoleLog(reduceWhich.bind(null, [1, 3, 4]));
 consoleLog(reduceWhich.bind(null, [2, 5, 4, 1], (a, b) => b - a)); // 5
 consoleLog(reduceWhich.bind(null, [{ name: 'Tom', age: 24 }, { name: 'James', age: 26 }, { name: 'Lebron', age: 20 }], (a, b) => a.age - b.age)); // { name: 'Lebron', age: 20 }
+
+/**
+ * union: 合并两个数组，且去重
+ * params: a, b
+ * return: []
+ */
+const union = (a, b) => Array.from(new Set([...a, ...b]));
+
+consoleLog(union.bind(null, [1, 2, 3, 4, 5, 6], [1, 2, 5, 9, 10])); // [ 1, 2, 3, 4, 5, 6, 9, 10 ]
+
+/**
+ * uniqueElements: 返回所有不重复的元素
+ * params: arr
+ * return: []
+ */
+const uniqueElements = arr => [...new Set(arr)];
+
+consoleLog(uniqueElements.bind(null, [1, 2, 3, 3, 4, 5, 6, 6])); // [ 1, 2, 3, 4, 5, 6 ]
