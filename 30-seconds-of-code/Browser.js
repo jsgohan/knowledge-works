@@ -165,5 +165,120 @@ const isBrowserTabFocused = () => !document.hidden;
 isBrowserTabFocused(); // true
 
 /**
- * 
+ * nodeListToArray: 转换NodeList为数组
+ * params: nodeList
+ * return: []
  */
+const nodeListToArray = nodeList => [...nodeList];
+
+nodeListToArray(document.childNodes); // [ <!DOCTYPE html>, html ]
+
+/**
+ * observeMutations: 为指定元素创建MutationObserver监听
+ * params: element, callback, options
+ */
+const observeMutations = (element, callback, options) => {
+  const observer = new MutationObserver(mutations => mutations.forEach(m => callback(m)));
+  observer.observe(
+    element,
+    Object.assign({
+      childList: true,
+      attributes: true,
+      attributeOldValue: true,
+      characterData: true,
+      characterDataOldValue: true,
+      subtree: true
+    }, options)
+  );
+  return observer;
+};
+
+const obs = observeMutations(document, console.log);
+obs.disconnect(); // 断开监听
+
+/**
+ * on: 添加事件监听
+ * 方法中使用事件委托，若有目标元素，需要判断目标元素(opts.target)是否为el的孩子元素
+ * params: el, evt, fn, opts
+ */
+const on = (el, evt, fn, opts = {}) => {
+  const delegatorFn = e => e.target.matches(opts.target) && fn.call(e.target, e);
+  el.addEventListener(evt, opts.target ? delegatorFn : fn, opts.options || false);
+  if (opts.target) return delegatorFn;
+};
+
+const onFn = () => console.log('!');
+on(document.body, 'click', onFn); // !
+on(document.body, 'click', onFn, { target: 'p' }); // 点击body中的P元素返回!
+on(document.body, 'click', onFn, { options: true }); // 使用捕获代替冒泡
+
+/**
+ * off: 取消事件监听
+ * params: el, evt, fn, opts
+ */
+const off = (el, evt, fn, opts = false) => el.removeEventListener(evt, fn, opts);
+
+const offFn = () => console.log('!');
+document.body.addEventListener('click', offFn);
+off(document.body, 'click', offFn);
+
+/**
+ * recordAnimationFrames: window.requestAnimationFrame()
+ * params: callback, autoStart(为true，直接执行run，否则返回start和stop，交由用户操作)
+ */
+const recordAnimationFrames = (callback, autoStart = true) => {
+  let running = true, raf;
+  const stop = () => {
+    running = false;
+    cancelAnimationFrame(raf);
+  };
+  const start = () => {
+    running = true;
+    run();
+  };
+  const run = () => {
+    raf = requestAnimationFrame(() => {
+      callback();
+      if (running) run();
+    });
+  };
+  if (autoStart) start();
+  return { start, stop };
+};
+
+const cb = () => console.log('Animation frame fired');
+const recorder = recordAnimationFrames(cb);
+recorder.stop();
+recorder.start();
+const recorder2 = recordAnimationFrames(cb, false);
+
+/**
+ * redirect: 指定URL重定向
+ * params: url, asLink(true代表链接点击跳转，false为HTTP重定向)
+ */
+const redirect = (url, asLink = true) => {
+  asLink ? (window.location.href = url) : window.location.replace(url);
+}
+
+redirect('https://google.com');
+
+/**
+ * runAsync: 使用web worker创建一个独立线程，执行长时间函数不阻塞UI
+ * 使用Blob对象创建一个blob url连接
+ * params: fn
+ */
+const runAsync = fn => {
+  const worker = new Worker(
+    URL.createObjectURL(new Blob([`postMessage((${fn})());`]), {
+      type: 'application/javascript; charset=utf-8'
+    })
+  );
+  return new Promise((res, rej) => {
+    worker.onmessage = ({ data }) => {
+      res(data), worker.terminate();
+    };
+    worker.onerror = err => {
+      rej(err), worker.terminate();
+    };
+  });
+};
