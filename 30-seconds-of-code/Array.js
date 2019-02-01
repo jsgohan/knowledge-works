@@ -86,6 +86,15 @@ const deepFlatten = arr => [].concat(...arr.map(v => (Array.isArray(v) ? deepFla
 consoleLog(deepFlatten.bind(null, [1, 2, [3, 4, 5, [7, 8, 9]]])); // [ 1, 2, 3, 4, 5, 7, 8, 9 ]
 
 /**
+ * flatten: 和deepFlatten区别在可以自定义扁平化的深度
+ * params: arr, depth
+ * return: 扁平化数组
+ */
+// const flatten = (arr, depth = 1) => [].concat(...arr.map(v => (depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v)));
+
+// consoleLog(flatten.bind(null, [1, [2, [3, [4, 5, 6]]]], 1)); // [ 1, 2, 3, [ 4, 5, 6 ] ]
+
+/**
  * difference: 返回a数组中在b数组中不存在的值
  * 将b用Set创建非重复的数组，a用filter过滤掉相同的即为不同的值
  * params: a, b
@@ -109,6 +118,56 @@ const differenceBy = (a, b, fn) => {
 }
 
 consoleLog(differenceBy.bind(null, [1.1, 2.2, 2.3, 4, 5.6, 6, 8], [1.1, 2.2, 4, 9], Math.floor)); // [ 5.6, 6, 8 ]
+
+/**
+ * intersection: 返回同时存在于a b数组的元素
+ * params: a, b
+ * return: []
+ */
+const intersection = (a, b) => {
+  const s = new Set(b);
+  return Array.from(new Set(a.filter(x => s.has(x))));
+}
+
+consoleLog(intersection.bind(null, [1, 2, 3, 4, 3, 2], [1, 2, 3, 4, 5, 6, 1])); // [ 1, 2, 3, 4 ]
+
+/**
+ * intersectionBy: 与intersection相似，区别在于先用fn对b数组处理得到处理后的s数组，a和s比较也用fn处理，范返回原始的a
+ * params: a, b, fn
+ * return: []
+ */
+const intersectionBy = (a, b, fn) => {
+  const s = new Set(b.map(fn));
+  return Array.from(new Set(a.filter(x => s.has(fn(x)))));
+}
+
+consoleLog(intersectionBy.bind(null, [1.1, 2.2, 2.3, 4, 5.6, 6, 8], [1.1, 2.2, 4, 9], Math.floor)); // [ 1.1, 2.2, 2.3, 4 ]
+
+/**
+ * symmetricDifference: 返回既不在a也不在b数组的数组
+ * params: a, b
+ * return: []
+ */
+const symmetricDifference = (a, b) => {
+  const sA = new Set(a);
+  const sB = new Set(b);
+  return [...a.filter(x => !sB.has(x)), ...b.filter(x => !sA.has(x))];
+};
+
+consoleLog(symmetricDifference.bind(null, [1, 2, 3], [2, 5, 9])); // [ 1, 3, 5, 9 ]
+
+/**
+ * symmetricDifferenceBy: 与symmetricDifference相似，与intersection相似，区别在于先用fn对b数组处理得到处理后的s数组，a和s比较也用fn处理，范返回原始的a
+ * params: a, b, fn
+ * return: []
+ */
+const symmetricDifferenceBy = (a, b, fn) => {
+  const sA = new Set(a.map(fn));
+  const sB = new Set(b.map(fn));
+  return [...a.filter(x => !sB.has(fn(x))), ...b.filter(x => !sA.has(fn(x)))];
+};
+
+consoleLog(symmetricDifferenceBy.bind(null, [1.1, 2.2, 2.3, 4, 5.6, 6, 8], [1.1, 2.2, 4, 9], Math.floor)); // [ 5.6, 6, 8, 9 ]
 
 /**
  * drop: 返回移除数组下标n以前值的新数组
@@ -145,3 +204,60 @@ consoleLog(findLast.bind(null, [1, 2, 3, 4], n => n % 2 === 1)); // 3
 const findLastIndex = (arr, fn) => arr.map((val, i) => [i, val]).filter(([i, val]) => fn(val, i, arr)).pop()[0];
 
 consoleLog(findLastIndex.bind(null, [1, 2, 3, 4, 5], n => n % 2 === 1)); // 4
+
+/**
+ * forEachRight: 反向forEach
+ * params: arr, fn
+ * return: 反向求值后的结果
+ */
+const forEachRight = (arr, fn) => arr.slice(0).reverse().forEach(fn);
+
+forEachRight.call(null, [1, 2, 3, 4], val => console.log(val)); // 4 3 2 1
+
+/**
+ * indexOfAll: 返回指定值在数组中的所有下标
+ * params: arr, val
+ * return: []
+ */
+const indexOfAll = (arr, val) => arr.reduce((acc, v, i) => (v === val ? [...acc, i] : acc), []);
+
+consoleLog(indexOfAll.bind(null, [1, 2, 3, 4, 5, 3], 3)); // [ 2, 5 ]
+
+/**
+ * initial: 返回去除最后一项的数组
+ * params: arr
+ * return: []
+ */
+const initial = arr => arr.slice(0, -1);
+
+consoleLog(initial.bind(null, [1, 2, 3])); // [ 1, 2 ]
+
+/**
+ * initializeArrayWithRange: 给定初始和结尾以及跳数，初始化数组
+ * params: end, start, step
+ * return: []
+ */
+const initializeArrayWithRange = (end, start = 0, step = 1) => Array.from({ length: Math.ceil((end - start + 1) / step)}, (v, i) => i * step + start);
+
+consoleLog(initializeArrayWithRange.bind(null, 10, 3, 3)); // [ 3, 6, 9 ]
+
+/**
+ * initializeArrayWithRangeRight: 给定初始和结尾以及跳数，初始化倒序数组
+ * params: end, start, step
+ * return: []
+ */
+const initializeArrayWithRangeRight = (end, start = 0, step = 1) => Array.from({ length: Math.ceil((end - start + 1) / step)}).map((v, i, arr) => (arr.length - i - 1) * step + start);
+
+consoleLog(initializeArrayWithRangeRight.bind(null, 10, 3, 3)); // [ 9, 6, 3 ]
+
+
+/**
+ * reduceWhich: 返回数组的最大或最小值，其中用于比较的函数可以自定义，fn默认返回最小值
+ * params: arr, fn
+ * return: 比较后的值
+ */
+const reduceWhich = (arr, comparator = (a, b) => a - b) => arr.reduce((a, b) => comparator(a, b) >=0 ? b : a);
+
+consoleLog(reduceWhich.bind(null, [1, 3, 4]));
+consoleLog(reduceWhich.bind(null, [2, 5, 4, 1], (a, b) => b - a)); // 5
+consoleLog(reduceWhich.bind(null, [{ name: 'Tom', age: 24 }, { name: 'James', age: 26 }, { name: 'Lebron', age: 20 }], (a, b) => a.age - b.age)); // { name: 'Lebron', age: 20 }
