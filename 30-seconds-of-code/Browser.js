@@ -149,6 +149,14 @@ const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
 getStyle(document.querySelector('p'), 'font-size'); // '16px'
 
 /**
+ * setStyle: 设置css样式
+ * params: el, ruleName, val
+ */
+const setStyle = (el, ruleName, val) => el.style[ruleName] = val;
+
+setStyle(document.querySelector('p'), 'font-size', '20px');
+
+/**
  * hasClass: 指定元素中包含指定样式返回true，否则false
  * params: el, className
  * return: boolean
@@ -223,6 +231,15 @@ document.body.addEventListener('click', offFn);
 off(document.body, 'click', offFn);
 
 /**
+ * triggerEvent: 给指定元素绑定自定义事件
+ * params: el, eventType, detail
+ */
+const triggerEvent = (el, eventType, detail) => el.dispatchEvent(new CustomEvent(eventType, { detail }));
+
+triggerEvent(document.getElementById('myId'), 'click');
+triggerEvent(document.getElementById('myId'), 'click', { username: 'reyshieh' });
+
+/**
  * recordAnimationFrames: window.requestAnimationFrame()
  * params: callback, autoStart(为true，直接执行run，否则返回start和stop，交由用户操作)
  */
@@ -282,3 +299,46 @@ const runAsync = fn => {
     };
   });
 };
+
+const longRunningFunction = () => {
+  let result = 0;
+  for (let i = 0; i < 1000; i++)
+    for (let j = 0; j < 700; j++)
+      for (let k = 0; k < 300; k++)
+        result = result + i + j + k;
+  return result;
+}
+runAsync(longRunningFunction).then(console.log); // 209685000000
+runAsync(() => 10 ** 3).then(console.log); // 1000
+let outsideVariable = 50;
+runAsync(() => typeof outsideVariable).then(console.log); // undefined
+
+/**
+ * scrollToTop: 平滑滚动到顶部
+ */
+const scrollToTop = () => {
+  const c = document.documentElement.scrollTop || document.body.scrollTop;
+  if (c > 0) {
+    window.requestAnimationFrame(scrollTop);
+    window.scrollTo(0, c - c / 8);
+  }
+}
+
+scrollToTop();
+
+/**
+ * smoothScroll: 滚动指定元素到浏览器可见视区
+ * params: el
+ */
+const smoothScroll = element => document.querySelector(element).scrollIntoView({ behavior: 'smooth' });
+
+smoothScroll('#fooBar');
+smoothScroll('.fooBar');
+
+/**
+ * toggleClass: 指定元素class开关触发器
+ * params: el, className
+ */
+const toggleClass = (el, className) => el.classList.toggle(className);
+
+toggleClass(document.querySelector('p.special'), 'special');
