@@ -98,6 +98,13 @@ const isNull = val => val === null;
 consoleLog(isNull.bind(null, null)); // true
 
 /**
+ * isUndefined: 判断是否为undefined
+ */
+const isUndefined = val => val === undefined;
+
+consoleLog(isUndefined.bind(null, undefined)); // true
+
+/**
  * isNumber: 判断是否为number
  */
 const isNumber = val => typeof val === 'number';
@@ -145,5 +152,30 @@ consoleLog(isPromiseLike.bind(null, {
 })); // true
 
 /**
- * isString: 
+ * isString: 判断是否为stirng类型
  */
+const isString = val => typeof val === 'string';
+
+consoleLog(isString.bind(null, '123')); // true
+
+/**
+ * isSymbol: 判断是否为symbol类型
+ */
+const isSymbol = val => typeof val === 'symbol';
+
+consoleLog(isSymbol.bind(null, Symbol('x'))); // true
+
+/**
+ * isValidJSON: 判断是否为合法JSON
+ */
+const isValidJSON = str => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+consoleLog(isValidJSON.bind(null, '{"name": "reyshieh", "age": 26}')); // true
+consoleLog(isValidJSON.bind(null, null)); // true
