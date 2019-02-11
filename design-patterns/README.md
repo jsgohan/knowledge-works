@@ -55,8 +55,8 @@
     }
     
     const door = DoorFactory.makeDoor(100, 200);
-    door.getWidth();
-    door.getHeight();
+    door.getWidth(); // 100
+    door.getHeight(); // 200
     ```
 
   - Factory Method - 工厂方法
@@ -65,7 +65,63 @@
 
     维基百科：
 
-    > 工厂方法模式是使用一些工厂方法来处理创建对象问题，没有指定准确的需要被创建的class。
+    > 工厂方法模式是使用一些工厂方法来处理创建对象问题，没有指定准确的需要被创建的类。创建对象通过调用工厂方法(指定接口由child类实现或实现一个基础类通过派生类选择性的覆盖)来完成，而不是直接调用构造函数
+
+    何时使用？
+
+    在类中，存在通用的处理且必要的子类是在运行时动态决定情况下很有用。或者换句话说，使用者不知道子类如何准确的执行时。
+
+    示例：
+
+    ```typescript
+    interface Interviewer {
+      askQuestions();
+    }
+    
+    class Developer implements Interviewer {
+      askQuestions() {
+        console.log('Asking about design patterns!');
+      }
+    }
+    
+    class CommunityExecutive implements Interviewer {
+      askQuestions() {
+        console.log('Asking about community building!');
+      }
+    }
+    
+    abstract class HiringManager {
+      interviewer;
+    
+      // Factory method
+      protected abstract makeInterviewer(): Interviewer;
+    
+      takeInterview() {
+        this.interviewer = this.makeInterviewer();
+        this.interviewer.askQuestions();
+      }
+    }
+    
+    class DevelopmentManager extends HiringManager {
+      protected makeInterviewer(): Interviewer {
+        return new Developer();
+      }
+    }
+    
+    class MarketingManager extends HiringManager {
+      protected makeInterviewer(): Interviewer {
+        return new CommunityExecutive();
+      }
+    }
+    
+    let devManager = new DevelopmentManager();
+    devManager.takeInterview(); // Asking about design patterns!
+    
+    let marketingManager = new MarketingManager();
+    marketingManager.takeInterview(); // Asking about community building!
+    ```
+
+  - Abstract Factory - 抽象工厂
 
 - Structural
 
