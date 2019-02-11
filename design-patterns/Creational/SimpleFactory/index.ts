@@ -28,5 +28,5 @@ class DoorFactory {
 }
 
 const door = DoorFactory.makeDoor(100, 200);
-door.getWidth();
-door.getHeight();
+console.log(door.getWidth()); // 100
+console.log(door.getHeight()); // 200
