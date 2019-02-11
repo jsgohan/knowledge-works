@@ -12,6 +12,14 @@ class Burger {
     this.lettuce = builder.lettuce;
     this.tomato = builder.tomato;
   }
+
+  run() {
+    console.log(`size: ${this.size}
+    cheese: ${this.cheese}
+    pepperoni: ${this.pepperoni}
+    lettuce: ${this.lettuce}
+    tomato: ${this.tomato}`);
+  }
 }
 
 class BurgerBuilder {
@@ -55,3 +63,10 @@ let burger = (new BurgerBuilder(14))
   .addLettuce()
   .addTomato()
   .build();
+
+burger.run();
+// size: 14
+// cheese: false
+// pepperoni: true
+// lettuce: true
+// tomato: true

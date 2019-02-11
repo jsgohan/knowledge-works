@@ -10,6 +10,9 @@ var Burger = /** @class */ (function () {
         this.lettuce = builder.lettuce;
         this.tomato = builder.tomato;
     }
+    Burger.prototype.run = function () {
+        console.log("size: " + this.size + "\n    cheese: " + this.cheese + "\n    pepperoni: " + this.pepperoni + "\n    lettuce: " + this.lettuce + "\n    tomato: " + this.tomato);
+    };
     return Burger;
 }());
 var BurgerBuilder = /** @class */ (function () {
@@ -46,3 +49,4 @@ var burger = (new BurgerBuilder(14))
     .addLettuce()
     .addTomato()
     .build();
+burger.run();

@@ -213,11 +213,90 @@
 
     >生成器模式是一种对象创建软件涉及模式，其目的是找到可伸缩构造函数反模式的解决方案
 
+    何时使用？
+
+    当对象带有多种风格且阻止构造函数参数叠加。生成器模式和工厂模式不同的关键点在于工厂模式创建过程只有一步，而生成器模式由多步完成
+
     示例：
 
     ```typescript
+    class Burger {
+      protected size;
+      protected cheese = false;
+      protected pepperoni = false;
+      protected lettuce = false;
+      protected tomato = false;
     
+      constructor(builder: BurgerBuilder) {
+        this.size = builder.size;
+        this.cheese = builder.cheese;
+        this.pepperoni = builder.pepperoni;
+        this.lettuce = builder.lettuce;
+        this.tomato = builder.tomato;
+      }
+    
+      run() {
+        console.log(`size: ${this.size}
+        cheese: ${this.cheese}
+        pepperoni: ${this.pepperoni}
+        lettuce: ${this.lettuce}
+        tomato: ${this.tomato}`);
+      }
+    }
+    
+    class BurgerBuilder {
+      size;
+      cheese = false;
+      pepperoni = false;
+      lettuce = false;
+      tomato = false;
+    
+      constructor(size: number) {
+        this.size = size;
+      }
+    
+      addPepperoni() {
+        this.pepperoni = true;
+        return this;
+      }
+    
+      addLettuce() {
+        this.lettuce = true;
+        return this;
+      }
+    
+      addCheese() {
+        this.cheese = true;
+        return this;
+      }
+    
+      addTomato() {
+        this.tomato = true;
+        return this;
+      }
+    
+      build(): Burger {
+        return new Burger(this);
+      }
+    }
+    
+    let burger = (new BurgerBuilder(14))
+      .addPepperoni()
+      .addLettuce()
+      .addTomato()
+      .build();
+    
+    burger.run();
+    // size: 14
+    // cheese: false
+    // pepperoni: true
+    // lettuce: true
+    // tomato: true
     ```
+
+  - Prototype - 原型模式
+
+    >
 
 - Structural
 
