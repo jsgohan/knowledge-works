@@ -420,6 +420,79 @@
     hunter.hunt(wildDogAdapter); // bark~
     ```
 
+  - Bridge - 桥接
+
+    > 桥接模式是关于优先选择组合而不是继承。实现细节从一个层次结构推送到另一个具有独立层次结构的对象
+
+    维基百科：
+
+    > 桥接模式是软件工程中使用的一种设计模式，其目的是"将抽象与其实现解耦，以便两者可以独立地变化"
+
+    ![bridge_pattern.png](http://reyshieh.com/assets/bridge_pattern.png)
+
+    示例：
+
+    ```typescript
+    interface WebPage {
+      getContent();
+    }
+    
+    class About implements WebPage {
+      protected theme;
+    
+      constructor(theme: Theme) {
+        this.theme = theme;
+      }
+    
+      getContent() {
+        return `About page in ${this.theme.getColor()}`;
+      }
+    }
+    
+    class Careers implements WebPage {
+      protected theme;
+    
+      constructor(theme: Theme) {
+        this.theme = theme;
+      }
+    
+      getContent() {
+        return `Careers page in ${this.theme.getColor()}`;
+      }
+    }
+    
+    // 解耦后的theme层级
+    interface Theme {
+      getColor();
+    }
+    
+    class DarkTheme implements Theme {
+      getColor() {
+        return 'Dark Black';
+      }
+    }
+    
+    class LightTheme implements Theme {
+      getColor() {
+        return 'Off white';
+      }
+    }
+    
+    class AquaTheme implements Theme {
+      getColor() {
+        return 'Lightblue';
+      }
+    }
+    
+    let darkTheme = new DarkTheme();
+    
+    let about = new About(darkTheme);
+    let careers = new Careers(darkTheme);
+    
+    console.log(about.getContent()); // About page in Dark Black
+    console.log(careers.getContent()); // Careers page in Dark Black
+    ```
+
   - 
 
 - Behavioral
