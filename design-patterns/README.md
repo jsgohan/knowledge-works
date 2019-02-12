@@ -296,9 +296,67 @@
 
   - Prototype - 原型模式
 
-    >
+    > 通过克隆的方式以已经存在的对象为基础创建对象
+
+    维基百科：
+
+    > 原型模式是一种软件开发生成器模式。当要创建的对象类型由一个原型实例决定时，将使用它，该原型实例被克隆以生成新的对象
+
+    JavaScript就是基于原型的模式创建对象，拷贝也分为两种，深拷贝和浅拷贝。若要拷贝一个完全独立内存的对象，必须使用深拷贝
+
+    ```js
+    const deepClone = obj => {
+      let clone = Object.assign({}, obj);
+      Object.keys(clone).forEach(
+        key => (clone[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+      );
+      return Array.isArray(obj) && obj.length ?
+        (clone.length = obj.length) && Array.from(clone) :
+          Array.isArray(obj) ?
+            Array.from(obj) :
+              clone;
+    };
+    
+    const a = { foo: 'bar', obj: { a: 1, b: 2 } };
+    const b = deepClone(a);
+    console.log(b); // { foo: 'bar', obj: { a: 1, b: 2 } }
+    ```
+
+  - Singleton - 单例模式
+
+    > 确保类只有一个实例被创建
+
+    维基百科：
+
+    > 在软件工程，单例模式限制类的实例化。对于需要在系统中保持行为一致性的对象来说是很有用的
+
+    示例：
+
+    ```typescript
+    class President {
+      static instance;
+    
+      constructor() {
+        // Hide the constructor
+      }
+    
+      static getInstance(): President {
+        if (!President.instance) {
+          President.instance = new President();
+        }
+        return President.instance;
+      }
+    }
+    
+    let president1 = President.getInstance();
+    let president2 = President.getInstance();
+    
+    console.log(president1 === president2); // true
+    ```
 
 - Structural
+
+  >
 
 - Behavioral
 
