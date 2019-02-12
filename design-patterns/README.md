@@ -667,7 +667,19 @@
     console.log(someCoffee.getDescription()); // Simple coffee, milk, whip, vanilla
     ```
 
-  - 
+  - Facade - 外观
+
+    > 外观模式为复杂子系统提供简单的接口
+
+    维基百科：
+
+    > 外观是一个对象，它为更大的代码体，如类库，提供了一个简化的接口
+
+    示例：
+
+    ```typescript
+    
+    ```
 
 - Behavioral
 
