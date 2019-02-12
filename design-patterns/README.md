@@ -493,6 +493,88 @@
     console.log(careers.getContent()); // Careers page in Dark Black
     ```
 
+  - composite - 组成
+
+    > 组成模式允许用户以统一的方式处理各个对象
+
+    维基百科：
+
+    > 在软件工程中，组成模式是一个分区设计模式。组成模式描述了将以与对象的单个实例相同的方式处理一组对象。组合的目的是将对象"组合"到树结构中，以表示部分-整体层次结构。实现组合模式可以让客户机统一地处理单个对象和组合
+
+    示例：
+
+    ```typescript
+    // 该例实际和Bridge示例十分相似
+    interface EmployeeConstructor {
+      new (name: string, salary: number): Employee;
+    }
+    
+    interface Employee {
+      getName(): string;
+      setSalary(salary: number);
+      getSalary(): number;
+      getRoles(): [];
+    }
+    
+    function creatEmployee(cEmp: EmployeeConstructor, name: string, salary: number): Employee {
+      return new cEmp(name, salary);
+    }
+    
+    class Developer implements Employee {
+      protected salary;
+      protected name;
+      protected roles;
+    
+      constructor(name: string, salary: number) {
+        this.name = name;
+        this.salary = salary;
+      }
+    
+      getName(): string {
+        return this.name;
+      }
+    
+      setSalary(salary: number) {
+        this.salary = salary;
+      }
+    
+      getSalary(): number {
+        return this.salary;
+      }
+    
+      getRoles(): [] {
+        return this.roles;
+      }
+    }
+    
+    class Organization {
+      protected employees: Employee[] = [];
+    
+      addEmployee(employee: Employee) {
+        this.employees.push(employee);
+      }
+    
+      getNetSalaries(): number {
+        let netSalary = 0;
+    
+        this.employees.forEach(emp => {
+          netSalary += emp.getSalary();
+        });
+    
+        return netSalary;
+      }
+    }
+    
+    let john = creatEmployee(Developer, 'John Doe', 12000);
+    let jane = creatEmployee(Developer, 'Jane Doe', 15000);
+    
+    let organization = new Organization();
+    organization.addEmployee(john);
+    organization.addEmployee(jane);
+    
+    console.log(`Net salaries: ${organization.getNetSalaries()}`); // Net salaries: 27000
+    ```
+
   - 
 
 - Behavioral
