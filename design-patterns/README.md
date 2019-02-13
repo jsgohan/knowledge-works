@@ -754,10 +754,115 @@
     示例：
 
     ```typescript
+    class KarakTea {
     
+    }
+    
+    // flyweight 用数组存储已经创建的对象，不过度创建
+    class TeaMaker {
+      protected availableTea = [];
+    
+      make(preference) {
+        if (!this.availableTea[preference]) {
+          this.availableTea[preference] = new KarakTea();
+        }
+    
+        return this.availableTea[preference];
+      }
+    }
+    
+    class TeaShop {
+      protected orders = [];
+      protected teaMaker;
+    
+      constructor(teaMaker: TeaMaker) {
+        this.teaMaker = teaMaker;
+      }
+    
+      takeOrder(teaType: string, table: number) {
+        this.orders[table] = this.teaMaker.make(teaType);
+      }
+    
+      serve() {
+        this.orders.forEach((order, index) => {
+          console.log(`Serving tea to table#${index}`);
+        });
+      }
+    }
+    
+    let teaMaker = new TeaMaker();
+    let shop = new TeaShop(teaMaker);
+    
+    shop.takeOrder('less sugar', 1);
+    shop.takeOrder('more milk', 2);
+    shop.takeOrder('without sugar', 5);
+    
+    shop.serve();
+    // Serving tea to table#1
+    // Serving tea to table#2
+    // Serving tea to table#5
     ```
 
-- Behavioral
+  - Proxy - 代理
+
+    > 使用代理模式，类表示另一个类的功能
+
+    维基百科：
+
+    > 代理，在其最一般的形式中，是一个类，它的功能是作为其他类的接口。代理是一个包装器或代理对象，客户机调用它来访问幕后的实际服务对象。代理的使用可以简单地转发到实际对象，也可以提供额外的逻辑。在代理中，可以提供额外的功能，例如，在实际对象上的操作是资源密集型操作时进行缓存，或者在调用实际对象上的操作之前检查先决条件。
+
+    示例：
+
+    ```typescript
+    interface Door {
+      open();
+      close();
+    }
+    
+    class LabDoor implements Door {
+      open() {
+        console.log('Opening lab door');
+      }
+    
+      close() {
+        console.log('closing the lab door');
+      }
+    }
+    
+    // 创建proxy
+    class SecureDoor {
+      protected door;
+    
+      constructor(door: Door) {
+        this.door = door;
+      }
+    
+      open(password) {
+        if (this.authenticate(password)) {
+          this.door.open();
+        } else {
+          console.log('Big no ! It ain\'t possible.');
+        }
+      }
+    
+      authenticate(password) {
+        return password === '$ecr@t';
+      }
+    
+      close() {
+        this.door.close();
+      }
+    }
+    
+    let door = new SecureDoor(new LabDoor());
+    door.open('invalid'); // Big no ! It ain't possible.
+    door.open('$ecr@t'); // Opening lab door
+    door.close(); // closing the lab door
+    ```
+
+- Behavioral Design Patterns
+
+  >
 
 
 
