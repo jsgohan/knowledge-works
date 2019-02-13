@@ -862,7 +862,89 @@
 
 - Behavioral Design Patterns
 
-  >
+  > 行为设计模式关注于对象之间的责任分配。它们与结构化设计模式的不同之处在于，它们不仅要指定结构，还概述了它们之间的消息传递/通信模式。换句话说，它们帮助回答了"如何在软件组件中运行行为？"
+
+  维基百科：
+
+  > 在软件工程中，行为设计模式是识别对象之间的公共通信模式并实现这些模式的设计模式。通过这样做，这些模式增加了执行此通信的灵活性。
+
+  - Chain of Responsibility - 责任链
+
+    > 责任链模式有助于构建对象链。请求从一端进入，从一个对象进入另一个对象，直到找到合适的处理程序
+
+    维基百科：
+
+    > 在面向对象设计中，责任链模式是一种由命令对象源和一系列处理对象组成的设计模式。每个处理对象都包含定义它可以处理的命令对象类型的逻辑;其余的传递给链中的下一个处理对象。
+
+    示例：
+
+    ```typescript
+    abstract class Account {
+      protected successor;
+      protected balance;
+    
+      // 设置责任链对象
+      setNext(account: Account) {
+        this.successor = account;
+      }
+    
+      pay(amountToPay: number) {
+        if (this.canPay(amountToPay)) {
+          console.log(`Paid ${amountToPay} by ${this.name}`);
+        } else if (this.successor) {
+          this.successor.pay(amountToPay);
+        } else {
+          console.error('None of the accounts have enough balance');
+        }
+      }
+    
+      canPay(amount): boolean {
+        return this.balance >= amount;
+      }
+    }
+    
+    class Bank extends Account {
+      protected balance;
+      name = 'Bank';
+    
+      constructor(balance: number) {
+        super();
+        this.balance = balance;
+      }
+    }
+    
+    class Paypal extends Account {
+      protected balance;
+      name = 'Paypal';
+    
+      constructor(balance: number) {
+        super();
+        this.balance = balance;
+      }
+    }
+    
+    class Bitcoin extends Account {
+      protected balance;
+      name = 'Bitcoin';
+    
+      constructor(balance: number) {
+        super();
+        this.balance = balance;
+      }
+    }
+    
+    // 自定义责任链，链式顺序为bank -> paypal -> bitcoin
+    let bank = new Bank(100);
+    let paypal = new Paypal(200);
+    let bitcoin = new Bitcoin(300);
+    
+    bank.setNext(paypal);
+    paypal.setNext(bitcoin);
+    
+    bank.pay(218); // Paid 218 by Bitcoin
+    ```
+
+  - Command
 
 
 
