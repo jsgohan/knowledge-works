@@ -944,7 +944,93 @@
     bank.pay(218); // Paid 218 by Bitcoin
     ```
 
-  - Command
+  - Command - 命令
+
+    > 命令模式允许在对象中封装操作，该模式背后的关键思想是提供将客户机与接收器解耦的方法
+
+    维基百科：
+
+    > 在面向对象编程中，命令模式是一种行为设计模式，在这种模式中，对象被用来封装执行某个操作或在稍后某个事件所需的所有信息。这些信息包括方法名、拥有方法的对象和方法参数的值
+
+    示例：
+
+    ```typescript
+    // Receiver
+    class Bulb {
+      turnOn() {
+        console.log('Bulb has been lit');
+      }
+    
+      turnOff() {
+        console.log('Darkness!');
+      }
+    }
+    
+    // Command接口
+    interface Command {
+      execute();
+      undo();
+      redo();
+    }
+    
+    // Command
+    class TurnOn implements Command {
+      protected bulb;
+    
+      constructor(bulb: Bulb) {
+        this.bulb = bulb;
+      }
+    
+      execute() {
+        this.bulb.turnOn();
+      }
+    
+      undo() {
+        this.bulb.turnOff();
+      }
+    
+      redo() {
+        this.execute();
+      }
+    }
+    
+    class TurnOff implements Command {
+      protected bulb;
+    
+      constructor(bulb: Bulb) {
+        this.bulb = bulb;
+      }
+    
+      execute() {
+        this.bulb.turnOff();
+      }
+    
+      undo() {
+        this.bulb.turnOn();
+      }
+    
+      redo() {
+        this.execute();
+      }
+    }
+    
+    // Invoker
+    class RemoteControl {
+      submit(command: Command) {
+        command.execute();
+      }
+    }
+    
+    let bulb = new Bulb();
+    let turnOn = new TurnOn(bulb);
+    let turnOff = new TurnOff(bulb);
+    
+    let remote = new RemoteControl();
+    remote.submit(turnOn); // Bulb has been lit
+    remote.submit(turnOff); // Darkness!
+    ```
+
+  - Iterator - 迭代器
 
 
 
