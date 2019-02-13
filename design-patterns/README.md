@@ -678,6 +678,82 @@
     示例：
 
     ```typescript
+    class Computer {
+      getElectricShock() {
+        console.log('Ouch');
+      }
+    
+      makeSound() {
+        console.log('Beep beep!');
+      }
+    
+      showLoadingScreen() {
+        console.log('Loading..');
+      }
+    
+      bam() {
+        console.log('Ready to be used!');
+      }
+    
+      closeEverything() {
+        console.log('Bup bup bup buzzzz!');
+      }
+    
+      sooth() {
+        console.log('Zzzzz');
+      }
+    
+      pullCurrent() {
+        console.log('Haaah');
+      }
+    }
+    
+    // facade
+    class ComputerFacade {
+      protected computer;
+    
+      constructor(computer: Computer) {
+        this.computer = computer;
+      }
+    
+      turnOn() {
+        this.computer.getElectricShock();
+        this.computer.makeSound();
+        this.computer.showLoadingScreen();
+        this.computer.bam();
+      }
+    
+      turnOff() {
+        this.computer.closeEverything();
+        this.computer.pullCurrent();
+        this.computer.sooth();
+      }
+    }
+    
+    // 使用facade
+    let computer = new ComputerFacade(new Computer());
+    computer.turnOn();
+    // Ouch
+    // Beep beep!
+    // Loading..
+    // Ready to be used!
+    computer.turnOff();
+    // Bup bup bup buzzzz!
+    // Haaah
+    // Zzzzz
+    ```
+
+  - Flyweight - 享元
+
+    > 享元模式是一种软件开发中的设计模式，其主要解决的问题是通过类对象的共享，来避免大量创建拥有相同内容的对象的开销
+
+    维基百科：
+
+    >在计算机编程中，享元是一个软件设计模式。享元是一个通过与其他类似对象共享尽可能多的数据来最小化内存使用的对象；当一个简单的重复表示将使用不可接受的内存量时，它是一种大量使用对象的方法
+
+    示例：
+
+    ```typescript
     
     ```
 
