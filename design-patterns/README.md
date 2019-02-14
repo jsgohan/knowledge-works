@@ -1374,7 +1374,68 @@
 
   - State - 状态
 
-    >
+    > 当状态改变时，状态模式允许使用者转换类的行为
+
+    维基百科:
+
+    > 状态模式是一种以面向对象的方式实现状态机的行为软件设计模式。对于状态模式，通过将每个单独的状态实现为状态模式接口的派生类，并通过调用模式超类定义的方法实现状态转换，从而实现状态机。状态模式可以解释为策略模式，它能够通过调用模式接口中定义的方法来切换当前策略。
+
+    示例：
+
+    ```typescript
+    // 个人觉得状态模式和策略模式相似
+    interface WritingState {
+      write(words: string);
+    }
+    
+    // state
+    class UpperCase implements WritingState {
+      write(words: string) {
+        console.log(words.toUpperCase());
+      }
+    }
+    
+    class LowerCase implements WritingState {
+      write(words: string) {
+        console.log(words.toLowerCase());
+      }
+    }
+    
+    class DefaultText implements WritingState {
+      write(words: string) {
+        console.log(words);
+      }
+    }
+    
+    class TextEditor {
+      protected state;
+    
+      constructor(state: WritingState) {
+        this.state = state;
+      }
+    
+      setState(state: WritingState) {
+        this.state = state;
+      }
+    
+      type(words: string) {
+        this.state.write(words);
+      }
+    }
+    
+    let editor = new TextEditor(new DefaultText());
+    editor.type('First line'); // First line
+    
+    editor.setState(new UpperCase());
+    editor.type('Second line'); // SECOND LINE
+    editor.type('Third line'); // THIRD LINE
+    
+    editor.setState(new LowerCase());
+    editor.type('Forth line'); // forth line
+    editor.type('Fifth line'); // fifth line
+    ```
+
+  - Template Method
 
 
 
