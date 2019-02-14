@@ -1322,6 +1322,59 @@
     dolphin.accept(jump); // Walked on water a little and disappeared
     ```
 
+  - Strategy - 策略
+
+    > 策略模式允许使用者根据不同的情况切换算法或策略
+
+    维基百科：
+
+    > 在计算机编程中，策略模式是一种行为软件设计模式，它允许在运行时选择算法的行为
+
+    示例：
+
+    ```typescript
+    interface SortStrategy {
+      sort(dataset: any[]): any[];
+    }
+    
+    class BubbleSortStrategy implements SortStrategy {
+      sort(dataset: any[]): any[] {
+        console.log('Sorting using bubble sort');
+        return dataset;
+      }
+    }
+    
+    class QuickSortStrategy implements SortStrategy {
+      sort(dataset: any[]): any[] {
+        console.log('Sorting using quick sort');
+        return dataset;
+      }
+    }
+    
+    class Sorter {
+      protected sorter;
+    
+      constructor(sorter: SortStrategy) {
+        this.sorter = sorter;
+      }
+    
+      sort(dataset: any[]): any[] {
+        return this.sorter.sort(dataset);
+      }
+    }
+    
+    let dataset = [1, 5, 3, 2, 5, 6];
+    
+    let sorter = new Sorter(new BubbleSortStrategy());
+    sorter.sort(dataset); // Sorting using bubble sort
+    
+    sorter = new Sorter(new QuickSortStrategy());
+    sorter.sort(dataset); // Sorting using quick sort
+    ```
+
+  - State - 状态
+
+    >
 
 
 
