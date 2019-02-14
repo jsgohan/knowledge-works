@@ -1165,7 +1165,161 @@
     示例：
 
     ```typescript
+    class JobPost {
+      protected title;
     
+      constructor(title: string) {
+        this.title = title;
+      }
+    
+      getTitle() {
+        return this.title;
+      }
+    }
+    
+    // observer
+    class JobSeeker {
+      protected name;
+    
+      constructor(name: string) {
+        this.name = name;
+      }
+    
+      onJobPosted(job: JobPost) {
+        console.log(`Hi ${this.name}! New job posted: ${job.getTitle()}`);
+      }
+    }
+    
+    class EmploymentAgency {
+      protected observers: JobSeeker[] = [];
+    
+      notify(jobPosting: JobPost) {
+        this.observers.forEach(observer => {
+          observer.onJobPosted(jobPosting);
+        });
+      }
+    
+      attach(observer: JobSeeker) {
+        this.observers.push(observer);
+      }
+    
+      addJob(jobPosting: JobPost) {
+        // 每当得到Job信息，就通知observer
+        this.notify(jobPosting);
+      }
+    }
+    
+    let johnDoe = new JobSeeker('John Doe');
+    let janeDoe = new JobSeeker('Jane Doe');
+    
+    let jobPostings = new EmploymentAgency();
+    jobPostings.attach(johnDoe);
+    jobPostings.attach(janeDoe);
+    
+    jobPostings.addJob(new JobPost('Software Engineer'));
+    // Hi John Doe! New job posted: Software Engineer
+    // Hi Jane Doe! New job posted: Software Engineer
+    ```
+
+  - Visitor - 访问者
+
+    > 访问者模式允许使用者向对象添加进一步的操作，而不必修改它们
+
+    维基百科:
+
+    > 在面向对象编程和软件工程中，访问者设计模式是一种将算法从其操作的对象结构中分离出来的方法。这种分离的一个实际结果是能够在不修改对象结构的情况下向其添加新操作。这是遵循开放/封闭原则的一种方式
+
+    示例：
+
+    ```typescript
+    // Visitee
+    interface Animal {
+      accept(operation: AnimalOperation);
+    }
+    
+    // Visitor
+    interface AnimalOperation {
+      visitMonkey(monkey: Monkey);
+      visitLion(lion: Lion);
+      visitDolphin(dolphin: Dolphin);
+    }
+    
+    class Monkey implements Animal {
+      shout() {
+        console.log('Ooh oo aa aa !');
+      }
+    
+      accept(operation: AnimalOperation) {
+        operation.visitMonkey(this);
+      }
+    }
+    
+    class Lion implements Animal {
+      shout() {
+        console.log('Roaaar!');
+      }
+    
+      accept(operation: AnimalOperation) {
+        operation.visitLion(this);
+      }
+    }
+    
+    class Dolphin implements Animal {
+      shout() {
+        console.log('Tuut tuttu tuutt!');
+      }
+    
+      accept(operation: AnimalOperation) {
+        operation.visitDolphin(this);
+      }
+    }
+    
+    // 实现Visitor
+    class Speak implements AnimalOperation {
+      visitMonkey(monkey: Monkey) {
+        monkey.shout();
+      }
+    
+      visitLion(lion: Lion) {
+        lion.shout();
+      }
+    
+      visitDolphin(dolphin: Dolphin) {
+        dolphin.shout();
+      }
+    }
+    
+    let monkey = new Monkey();
+    let lion = new Lion();
+    let dolphin = new Dolphin();
+    
+    let speak = new Speak();
+    
+    monkey.accept(speak); // Ooh oo aa aa !
+    lion.accept(speak); // Roaaar!
+    dolphin.accept(speak); // Tuut tuttu tuutt!
+    
+    // 现在我们可以在已有的基础上添加action，例如我们想知道每个动物的调高情况
+    // 可以添加一个Jump类
+    class Jump implements AnimalOperation {
+      visitMonkey(monkey: Monkey) {
+        console.log('Jumped 20 feet high! on to the tree!');
+      }
+    
+      visitLion(lion: Lion) {
+        console.log('Jumped 7 feet! Back on the ground');
+      }
+    
+      visitDolphin(dolphin: Dolphin) {
+        console.log('Walked on water a little and disappeared');
+      }
+    }
+    
+    let jump = new Jump();
+    
+    monkey.accept(jump); // Jumped 20 feet high! on to the tree!
+    lion.accept(jump); // Jumped 7 feet! Back on the ground
+    dolphin.accept(jump); // Walked on water a little and disappeared
     ```
 
 
