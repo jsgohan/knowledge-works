@@ -1095,6 +1095,68 @@
     jane.send('Hey!'); // Thu Feb 14 2019 10:05:25 GMT+0800 (CST) [ Jane Doe ]: Hey!
     ```
 
+  - Memento - 备忘录
+
+    > 备忘录模式是一种捕获和存储对象当前状态的方式，这种方式可以在以后以一种平稳的方式恢复
+
+    维基百科：
+
+    > 备忘录模式是一种软件设计模式，它提供存储对象先前的状态的能力(撤销通过回滚)
+
+    示例：
+
+    ```typescript
+    // memento
+    class EditorMemento {
+      protected content;
+    
+      constructor(content: string) {
+        this.content = content;
+      }
+    
+      getContent() {
+        return this.content;
+      }
+    }
+    
+    class Editor {
+      protected content = '';
+    
+      type(words) {
+        this.content = this.content + ' ' + words;
+      }
+    
+      getContent() {
+        return this.content;
+      }
+    
+      save() {
+        return new EditorMemento(this.content);
+      }
+    
+      restore(memento: EditorMemento) {
+        this.content = memento.getContent();
+      }
+    }
+    
+    let editor = new Editor();
+    
+    editor.type('This is the first sentence.');
+    editor.type('This is second.');
+    
+    let saved = editor.save();
+    
+    editor.type('And this is third.');
+    
+    console.log(editor.getContent()); // This is the first sentence. This is second. And this is third.
+    
+    editor.restore(saved);
+    console.log(editor.getContent()); //  This is the first sentence. This is second.
+    ```
+
+  - Observer - 观察者
+
+    >
 
 
 
