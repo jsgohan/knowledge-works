@@ -1032,5 +1032,69 @@
 
   - Iterator - 迭代器
 
+    > 迭代器模式提供一种访问对象元素而不暴露底层表示的方法
+
+    维基百科：
+
+    > 在面向对象编程中，迭代器模式是一种设计模式，其中迭代器用于遍历容器并访问容器的元素。迭代器模式将算法与容器解耦；在某些情况下，算法必须特定于容器，因此不能解耦
+
+    示例：
+
+    ```typescript
+    
+    ```
+
+  - Mediator - 中介者
+
+    > 中介者模式增加了一个第三方对象(称为中介者)来控制两个对象(称为同事)之间的交互。它有助于减少相互通信的类之间的耦合。因为现在他们不需要知道彼此的实现
+
+    维基百科：
+
+    > 在软件工程中，中介者模式定义一个对象，该对象封装了一组对象的交互方式。这种模式被认为是一种行为模式，因为它可以改变程序的运行行为
+
+    示例：
+
+    ```typescript
+    interface ChatRoomMediator {
+      showMessage(user: User, message: string);
+    }
+    
+    // Mediator
+    class ChatRoom implements ChatRoomMediator {
+      showMessage(user: User, message: string) {
+        let time = new Date();
+        let sender = user.getName();
+        console.log(`${time} [ ${sender} ]: ${message}`);
+      }
+    }
+    
+    // colleagues
+    class User {
+      protected name;
+      protected chatMediator;
+    
+      constructor(name: string, chatMediator: ChatRoomMediator) {
+        this.name = name;
+        this.chatMediator = chatMediator;
+      }
+    
+      getName() {
+        return this.name;
+      }
+    
+      send(message) {
+        this.chatMediator.showMessage(this, message);
+      }
+    }
+    
+    let mediator = new ChatRoom();
+    let john = new User('John Doe', mediator);
+    let jane = new User('Jane Doe', mediator);
+    
+    john.send('Hi there!'); // Thu Feb 14 2019 10:05:25 GMT+0800 (CST) [ John Doe ]: Hi there!
+    jane.send('Hey!'); // Thu Feb 14 2019 10:05:25 GMT+0800 (CST) [ Jane Doe ]: Hey!
+    ```
+
+
 
 
