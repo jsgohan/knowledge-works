@@ -1435,7 +1435,84 @@
     editor.type('Fifth line'); // fifth line
     ```
 
-  - Template Method
+  - Template Method - 模板方法
+
+    > 模板方法模式定义了如何执行某个算法的骨架，但将这些步骤的实现顺延到子类中
+
+    维基百科：
+
+    > 在软件工程中，模板方法模式是一个行为设计模式，它定义了操作中的算法程序骨架，将某些步骤顺延到子类中。它允许重新定义算法的某些步骤但不改变算法的框架
+
+    示例：
+
+    ```typescript
+    // 指定build算法的框架基类
+    abstract class Builder {
+      // Template method
+      build() {
+        this.test();
+        this.lint();
+        this.assembly();
+        this.deploy();
+      }
+    
+      abstract test();
+      abstract lint();
+      abstract assembly();
+      abstract deploy();
+    }
+    
+    class AndroidBuilder extends Builder {
+      test() {
+        console.log('Running android tests');
+      }
+    
+      lint() {
+        console.log('Linting the android code');
+      }
+    
+      assembly() {
+        console.log('Assemblying the android build');
+      }
+    
+      deploy() {
+        console.log('Deploying android build to server');
+      }
+    }
+    
+    class IosBuilder extends Builder {
+      test() {
+        console.log('Running ios tests');
+      }
+    
+      lint() {
+        console.log('Linting the ios code');
+      }
+    
+      assembly() {
+        console.log('Assemblying the ios build');
+      }
+    
+      deploy() {
+        console.log('Deploying ios build to server');
+      }
+    }
+    
+    let androidBuilder = new AndroidBuilder();
+    androidBuilder.build();
+    // Running android tests
+    // Linting the android code
+    // Assemblying the android build
+    // Deploying android build to server
+    
+    let iosBuilder = new IosBuilder();
+    iosBuilder.build();
+    // Running ios tests
+    // Linting the ios code
+    // Assemblying the ios build
+    // Deploying ios build to server
+    ```
+
 
 
 
