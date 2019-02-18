@@ -236,3 +236,49 @@ const times = (n, fn, context = undefined) => {
 let output = '';
 times(5, i => output += i);
 console.log(output); // 01234
+
+/**
+ * AOP: 高阶函数实现AOP，主要实现抽离核心业务逻辑模块无关的功能，通过动态织入的方式渗入业务逻辑模块中
+ * 以before、after为例
+ */
+Function.prototype.before = function(beforefn) {
+  const _self = this;
+  return () => {
+    beforefn.apply(this, arguments);
+    return _self.apply(this, arguments);
+  };
+};
+Function.prototype.after = function(afterfn) {
+  const _self = this;
+  return () => {
+    const ret = _self.apply(this, arguments);
+    afterfn.apply(this, arguments);
+    return ret;
+  };
+};
+let middleFn = function() {
+  console.log('middle');
+}
+middleFn = middleFn
+  .before(() => console.log('before'))
+  .after(() => console.log('after'));
+middleFn();
+// before
+// middle
+// after
+
+/**
+ * getSingle: 单例模式
+ * params: fn
+ */
+const getSingle = function(fn) {
+  let ret;
+  return () => ret || ( ret = fn.apply(this, arguments) );
+}
+
+const getObj = getSingle(function() {
+  return { a: 1 };
+});
+let obj1 = getObj();
+let obj2 = getObj();
+console.log(obj1 === obj2); // true

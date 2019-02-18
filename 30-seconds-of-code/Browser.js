@@ -9,7 +9,7 @@ const arrayToHtmlList = (arr, listID) =>
     (el.innerHTML += arr.map(item => `<li>${item}</li>`).join(''))
   ))();
 
-arrayToHtmlList(['item1', 'item2'], 'myListID');
+// arrayToHtmlList(['item1', 'item2'], 'myListID');
 
 /**
  * bottomVisible: 页面到底可见返回true，否则返回false
@@ -17,7 +17,7 @@ arrayToHtmlList(['item1', 'item2'], 'myListID');
  */
 const bottomVisible = () => document.documentElement.clientHeight + window.scrollY >= (document.documentElement.scrollHeight || document.documentElement.clientHeight);
 
-bottomVisible();
+// bottomVisible();
 
 /**
  * copyToClipboard: 拷贝文本到剪贴板
@@ -39,7 +39,7 @@ const copyToClipboard = text => {
   }
 }
 
-copyToClipboard('reyshieh');
+// copyToClipboard('reyshieh');
 
 /**
  * createElement: 为字符串创建元素
@@ -51,12 +51,12 @@ const createElement = str => {
   return el.firstElementChild;
 }
 
-const el = createElement(
-  `<div class="container">
-    <p>Hello!</p>
-  </div>`
-);
-console.log(el.className); // 'container'
+// const el = createElement(
+//   `<div class="container">
+//     <p>Hello!</p>
+//   </div>`
+// );
+// console.log(el.className); // 'container'
 
 /**
  * createEventHub: 事件总线
@@ -76,29 +76,29 @@ const CreateEventHub = () => ({
   }
 });
 
-const handler = data => console.log(data);
-const hub = new CreateEventHub();
-let increment = 0;
+// const handler = data => console.log(data);
+// const hub = new CreateEventHub();
+// let increment = 0;
 
-// 订阅不同类型的监听事件
-hub.on('message', handler);
-hub.on('message', () => console.log('Message Event fired'));
-hub.on('increment', () => increment++);
+// // 订阅不同类型的监听事件
+// hub.on('message', handler);
+// hub.on('message', () => console.log('Message Event fired'));
+// hub.on('increment', () => increment++);
 
-// 发布，触发所有订阅的事件
-hub.emit('message', 'hello world'); // hello world /n MessageEvent fired
-hub.emit('message', { hello: 'world' }); // object /n MessageEvent fired
-hub.emit('increment'); // 1
+// // 发布，触发所有订阅的事件
+// hub.emit('message', 'hello world'); // hello world /n MessageEvent fired
+// hub.emit('message', { hello: 'world' }); // object /n MessageEvent fired
+// hub.emit('increment'); // 1
 
-// 取消订阅事件监听
-hub.off('message', handler);
+// // 取消订阅事件监听
+// hub.off('message', handler);
 
 /**
  * detectDeviceType: 返回网站打开的设备类型
  */
 const detectDeviceType = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
 
-detectDeviceType();
+// detectDeviceType();
 
 /**
  * elementIsVisibleInViewport: 如果指定元素在可见区域返回true，否则返回false
@@ -112,8 +112,8 @@ const elementIsVisibleInViewport = (el, partialVisible = false) => {
     : top >=0 && left >=0 && bottom <= innerHeight && right <=innerWidth;
 };
 
-elementIsVisibleInViewport(el); // 全部可见
-elementIsVisibleInViewport(el, true); // 部分可见即可
+// elementIsVisibleInViewport(el); // 全部可见
+// elementIsVisibleInViewport(el, true); // 部分可见即可
 
 /**
  * getImages: 获取指定元素内的所有图片src
@@ -125,8 +125,8 @@ const getImages = (el, includeDuplicate = false) => {
   return includeDuplicate ? images : [...new Set(images)];
 };
 
-getImages(document, true); // ['image1.png', 'image2.png', 'image1.png', ...]
-getImages(document, false); // ['image1.png', 'image2.png', ...]
+// getImages(document, true); // ['image1.png', 'image2.png', 'image1.png', ...]
+// getImages(document, false); // ['image1.png', 'image2.png', ...]
 
 /**
  * getScrollPosition: 获取当前el的滚动条位置
@@ -137,7 +137,7 @@ const getScrollPosition = (el = window) => ({
   y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
 });
 
-getScrollPosition();
+// getScrollPosition();
 
 /**
  * getStyle: 获取元素指定css样式的值
@@ -146,7 +146,7 @@ getScrollPosition();
  */
 const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
 
-getStyle(document.querySelector('p'), 'font-size'); // '16px'
+// getStyle(document.querySelector('p'), 'font-size'); // '16px'
 
 /**
  * setStyle: 设置css样式
@@ -154,7 +154,7 @@ getStyle(document.querySelector('p'), 'font-size'); // '16px'
  */
 const setStyle = (el, ruleName, val) => el.style[ruleName] = val;
 
-setStyle(document.querySelector('p'), 'font-size', '20px');
+// setStyle(document.querySelector('p'), 'font-size', '20px');
 
 /**
  * hasClass: 指定元素中包含指定样式返回true，否则false
@@ -163,14 +163,14 @@ setStyle(document.querySelector('p'), 'font-size', '20px');
  */
 const hasClass = (el, className) => el.classList.contains(className);
 
-hasClass(document.querySelector('p.special'), 'special'); // true
+// hasClass(document.querySelector('p.special'), 'special'); // true
 
 /**
  * isBrowserTabFocused: 当前浏览器tab处于focused状态返回true，否则false
  */
 const isBrowserTabFocused = () => !document.hidden;
 
-isBrowserTabFocused(); // true
+// isBrowserTabFocused(); // true
 
 /**
  * nodeListToArray: 转换NodeList为数组
@@ -179,7 +179,7 @@ isBrowserTabFocused(); // true
  */
 const nodeListToArray = nodeList => [...nodeList];
 
-nodeListToArray(document.childNodes); // [ <!DOCTYPE html>, html ]
+// nodeListToArray(document.childNodes); // [ <!DOCTYPE html>, html ]
 
 /**
  * observeMutations: 为指定元素创建MutationObserver监听
@@ -201,8 +201,8 @@ const observeMutations = (element, callback, options) => {
   return observer;
 };
 
-const obs = observeMutations(document, console.log);
-obs.disconnect(); // 断开监听
+// const obs = observeMutations(document, console.log);
+// obs.disconnect(); // 断开监听
 
 /**
  * on: 添加事件监听
@@ -215,10 +215,10 @@ const on = (el, evt, fn, opts = {}) => {
   if (opts.target) return delegatorFn;
 };
 
-const onFn = () => console.log('!');
-on(document.body, 'click', onFn); // !
-on(document.body, 'click', onFn, { target: 'p' }); // 点击body中的P元素返回!
-on(document.body, 'click', onFn, { options: true }); // 使用捕获代替冒泡
+// const onFn = () => console.log('!');
+// on(document.body, 'click', onFn); // !
+// on(document.body, 'click', onFn, { target: 'p' }); // 点击body中的P元素返回!
+// on(document.body, 'click', onFn, { options: true }); // 使用捕获代替冒泡
 
 /**
  * off: 取消事件监听
@@ -226,9 +226,9 @@ on(document.body, 'click', onFn, { options: true }); // 使用捕获代替冒泡
  */
 const off = (el, evt, fn, opts = false) => el.removeEventListener(evt, fn, opts);
 
-const offFn = () => console.log('!');
-document.body.addEventListener('click', offFn);
-off(document.body, 'click', offFn);
+// const offFn = () => console.log('!');
+// document.body.addEventListener('click', offFn);
+// off(document.body, 'click', offFn);
 
 /**
  * triggerEvent: 给指定元素绑定自定义事件
@@ -236,8 +236,8 @@ off(document.body, 'click', offFn);
  */
 const triggerEvent = (el, eventType, detail) => el.dispatchEvent(new CustomEvent(eventType, { detail }));
 
-triggerEvent(document.getElementById('myId'), 'click');
-triggerEvent(document.getElementById('myId'), 'click', { username: 'reyshieh' });
+// triggerEvent(document.getElementById('myId'), 'click');
+// triggerEvent(document.getElementById('myId'), 'click', { username: 'reyshieh' });
 
 /**
  * recordAnimationFrames: window.requestAnimationFrame()
@@ -263,11 +263,11 @@ const recordAnimationFrames = (callback, autoStart = true) => {
   return { start, stop };
 };
 
-const cb = () => console.log('Animation frame fired');
-const recorder = recordAnimationFrames(cb);
-recorder.stop();
-recorder.start();
-const recorder2 = recordAnimationFrames(cb, false);
+// const cb = () => console.log('Animation frame fired');
+// const recorder = recordAnimationFrames(cb);
+// recorder.stop();
+// recorder.start();
+// const recorder2 = recordAnimationFrames(cb, false);
 
 /**
  * redirect: 指定URL重定向
@@ -277,7 +277,7 @@ const redirect = (url, asLink = true) => {
   asLink ? (window.location.href = url) : window.location.replace(url);
 }
 
-redirect('https://google.com');
+// redirect('https://google.com');
 
 /**
  * runAsync: 使用web worker创建一个独立线程，执行长时间函数不阻塞UI
@@ -300,18 +300,18 @@ const runAsync = fn => {
   });
 };
 
-const longRunningFunction = () => {
-  let result = 0;
-  for (let i = 0; i < 1000; i++)
-    for (let j = 0; j < 700; j++)
-      for (let k = 0; k < 300; k++)
-        result = result + i + j + k;
-  return result;
-}
-runAsync(longRunningFunction).then(console.log); // 209685000000
-runAsync(() => 10 ** 3).then(console.log); // 1000
-let outsideVariable = 50;
-runAsync(() => typeof outsideVariable).then(console.log); // undefined
+// const longRunningFunction = () => {
+//   let result = 0;
+//   for (let i = 0; i < 1000; i++)
+//     for (let j = 0; j < 700; j++)
+//       for (let k = 0; k < 300; k++)
+//         result = result + i + j + k;
+//   return result;
+// }
+// runAsync(longRunningFunction).then(console.log); // 209685000000
+// runAsync(() => 10 ** 3).then(console.log); // 1000
+// let outsideVariable = 50;
+// runAsync(() => typeof outsideVariable).then(console.log); // undefined
 
 /**
  * scrollToTop: 平滑滚动到顶部
@@ -324,7 +324,7 @@ const scrollToTop = () => {
   }
 }
 
-scrollToTop();
+// scrollToTop();
 
 /**
  * smoothScroll: 滚动指定元素到浏览器可见视区
@@ -332,8 +332,8 @@ scrollToTop();
  */
 const smoothScroll = element => document.querySelector(element).scrollIntoView({ behavior: 'smooth' });
 
-smoothScroll('#fooBar');
-smoothScroll('.fooBar');
+// smoothScroll('#fooBar');
+// smoothScroll('.fooBar');
 
 /**
  * toggleClass: 指定元素class开关触发器
@@ -341,4 +341,40 @@ smoothScroll('.fooBar');
  */
 const toggleClass = (el, className) => el.classList.toggle(className);
 
-toggleClass(document.querySelector('p.special'), 'special');
+// toggleClass(document.querySelector('p.special'), 'special');
+
+/**
+ * timeThunk: 分时函数，为了解决短时间内创建过多的节点而使页面卡顿
+ * @param ary 创建节点时需要用到的数据
+ * @param fn 创建节点逻辑的函数
+ * @param count 每一批创建的节点数量
+ */
+const timeChunk = (ary, fn, count) => {
+  let obj, t;
+  const start = () => {
+    for (let i = 0; i < Math.min(count || 1, ary.length); i++) {
+      obj = ary.shift();
+      fn(obj);
+    }
+  };
+
+  return () => {
+    t = setInterval(() => {
+      if (ary.length === 0) {
+        return clearInterval(t);
+      }
+      start();
+    }, 200);
+  }
+}
+
+// let timeAry = [];
+// for(let i = 0; i < 1000; i++) {
+//   timeAry.push(i);
+// }
+// let renderFriendList = timeChunk(timeAry, (n) => {
+//   let div = document.createElement('div');
+//   div.innerHTML = n;
+//   document.body.appendChild(div);
+// }, 8);
+// renderFriendList();
