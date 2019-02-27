@@ -185,6 +185,94 @@ for (names.front(); names.hasNext(); names.next()) {
 }
 ```
 
+## 栈
+
+栈是一种高效的数据结构，数据只能从栈顶添加或删除，栈被称为是一种**后入先出**(LIFO,list-in-first-out)的数据结构。
+
+对栈的两种主要操作是将一个元素压入栈和将一个元素弹出栈。入栈使用**push()**方法，出栈用**pop()**方法。
+
+预览栈顶的元素使用**peek()**方法。
+
+清除栈内所有元素用**clear()**方法。**length**属性记录栈内元素的个数。**empty**属性用来表示栈内是否含有元素。
+
+```typescript
+// 栈
+/**
+ * StackInterface 接口
+ * @param dataStore 存放所有数据数组
+ * @param top 记录栈顶位置，被构造函数初始化为0，表示栈顶对应数组的起始位置0，要和数组下标区分，找对应栈顶元素时要用top-1
+ * @param push 该方法用来入栈
+ * @param pop 该方法用来出栈
+ * @param peek 该方法用来返回栈顶元素
+ */
+interface StackInterface {
+  dataStore: any[];
+  top: number;
+  push(element: any): void;
+  pop(): any;
+  peek(): any;
+  length(): number;
+  clear(): any;
+}
+
+class Stack implements StackInterface {
+  dataStore = [];
+  top = 0;
+
+  push(element) {
+    this.dataStore[this.top++] = element;
+  }
+
+  pop() {
+    return this.dataStore[--this.top];
+  }
+
+  peek() {
+    return this.dataStore[this.top - 1];
+  }
+
+  length() {
+    return this.top;
+  }
+
+  clear() {
+    this.top = 0;
+  }
+}
+
+const s = new Stack();
+s.push('rey');
+s.push('shieh');
+s.push('james');
+s.push('cain');
+console.log(s);
+// Stack { dataStore: [ 'rey', 'shieh', 'james', 'cain' ], top: 4 }
+
+var l = s.pop();
+console.log(l);
+// cain
+```
+
+在实际编程中，有很多问题可以用栈来解决比较合适
+
+- 数制间的相互转换
+
+- 回文问题，即从前往后和从后往前排序的字符串相等
+
+- 递归问题
+
+  ```js
+  function fact(n) {
+    var s = new Stack();
+    while (n > 1) s.push(n--);
+    var product = 1;
+    while (s.length() > 0) product *= s.pop();
+    return product;
+  }
+  
+  console.log(fact(5)); // 120
+  ```
+
 ## 排序
 
 > 排序是对一组序列按照某个关键字进行排序，可以分为升序和降序
