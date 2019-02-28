@@ -49,6 +49,8 @@ class DLList {
     var newNode = new NodeItem(newElement);
     var current = this.find(item);
     newNode.next = current.next;
+    if (current.next && current.next.previous) current.next.previous = newNode;
+    newNode.previous = current;
     current.next = newNode;
   }
 
@@ -64,26 +66,57 @@ class DLList {
   }
 
   /**
-   * findPrevious: 该方法是用来删除节点前使用的
-   * 因为在删除一个节点之前，需知道该节点的前一个节点，这样才可以修改它的next属性
-   * @param item 待删除的节点
-   * @return currNode 返回待删除节点的前个节点
+   * remove: 删除节点
    */
-  findPrevious(item) {
+  remove(item) {
+    var currNode = this.find(item);
+    if (!(currNode.next == null)) {
+      currNode.previous.next = currNode.next;
+      if (currNode.next && currNode.next.previous) currNode.next.previous = currNode.previous;
+      currNode.next = null;
+      currNode.previous = null;
+    }
+  }
+
+  /**
+   * findLast: 为了完成反序显示链表中元素，增加查找最后的节点方法
+   */
+  findLast() {
     var currNode = this.head;
-    while (!(currNode.next == null) && (currNode.next.element != item)) {
+    while (!(currNode.next == null)) {
       currNode = currNode.next;
     }
     return currNode;
   }
 
   /**
-   * remove: 删除节点
+   * dispReverse: 反序显示双向链表中的元素
    */
-  remove(item) {
-    var prevNode = this.findPrevious(item);
-    if (!(prevNode.next == null)) {
-      prevNode.next = prevNode.next.next;
+  dispReverse() {
+    var currNode = this.findLast();
+    while (!(currNode.previous == null)) {
+      console.log(currNode.element);
+      currNode = currNode.previous;
     }
   }
 }
+
+var cities = new DLList();
+
+cities.insert('Shenzhen', 'head');
+cities.insert('Guangzhou', 'Shenzhen');
+cities.insert('Fuzhou', 'Guangzhou');
+
+cities.display();
+// Shenzhen
+// Guangzhou
+// Fuzhou
+
+cities.remove('Guangzhou');
+cities.display();
+// Shenzhen
+// Fuzhou
+
+cities.dispReverse();
+// Fuzhou
+// Shenzhen
