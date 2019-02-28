@@ -470,7 +470,126 @@ console.log(ed.toString());
 // xie code: 3
 ```
 
+## 链表
 
+链表是由一组节点组成的集合。每个节点都使用一个对象的引用指向它的后继。指向另一个节点的引用叫做**链**。
+
+遍历链表，就是跟着链接，从链表的首元素一直走到尾元素，链表的尾元素指向一个null节点。
+
+许多链表的实现都在链表最前面有一个特殊节点，叫做头节点。
+
+向链表插入一个节点，需要修改它前面的节点（前驱），使其指向新加入的节点，而新加入的节点则指向原来前驱指向的节点。
+
+链表中删除节点，从待删除节点的前驱节点指向待删除节点的后继节点，同时将待删除节点指向null，节点就删除成功。
+
+```typescript
+// 单向链表
+/**
+ * NodeItem 类
+ * @param element 保存节点上的数据
+ * @param next 保存指向下一个节点的链接
+ */
+class NodeItem {
+  element;
+  next = null;
+
+  constructor(element: any) {
+    this.element = element;
+    this.next = null;
+  }
+};
+
+/**
+ * LList类: 提供对链表的操作的方法，功能包括插入删除及诶单，在列表中查找给定的值
+ * @param head head节点的next属性被初始化为null，当有新元素插入时，next会指向新的元素
+ */
+class LList {
+  head;
+  constructor() {
+    this.head = new NodeItem('head');
+  }
+
+  /**
+   * 遍历链表，查找给定数据
+   * 如果找到数据，该方法返回保存该数据的节点
+   * @param item 需要查找的数据
+   */
+  find(item) {
+    var currNode = this.head;
+    while (currNode.element !== item) {
+      currNode = currNode.next;
+    }
+    return currNode;
+  }
+
+  /**
+   * insert: 将新节点插入链表
+   * @param newElement 待插入的节点
+   * @param item newElement将插入到该节点之后
+   */
+  insert(newElement, item) {
+    var newNode = new NodeItem(newElement);
+    var current = this.find(item);
+    newNode.next = current.next;
+    current.next = newNode;
+  }
+
+  /**
+   * display: 显示链表中的数据
+   */
+  display() {
+    var currNode = this.head;
+    while (!(currNode.next === null)) {
+      console.log(currNode.next.element);
+      currNode = currNode.next;
+    }
+  }
+
+  /**
+   * findPrevious: 该方法是用来删除节点前使用的
+   * 因为在删除一个节点之前，需知道该节点的前一个节点，这样才可以修改它的next属性
+   * @param item 待删除的节点
+   * @return currNode 返回待删除节点的前个节点
+   */
+  findPrevious(item) {
+    var currNode = this.head;
+    while (!(currNode.next == null) && (currNode.next.element != item)) {
+      currNode = currNode.next;
+    }
+    return currNode;
+  }
+
+  /**
+   * remove: 删除节点
+   */
+  remove(item) {
+    var prevNode = this.findPrevious(item);
+    if (!(prevNode.next == null)) {
+      prevNode.next = prevNode.next.next;
+    }
+  }
+}
+
+var cities = new LList();
+
+cities.insert('Shenzhen', 'head');
+cities.insert('Guangzhou', 'Shenzhen');
+cities.insert('Fuzhou', 'Guangzhou');
+
+cities.display();
+// Shenzhen
+// Guangzhou
+// Fuzhou
+
+cities.remove('Guangzhou');
+cities.display();
+// Shenzhen
+// Fuzhou
+```
+
+单向链表虽然使链表从头节点遍历到尾节点很容易，但反过来却没那么简单。
+
+为了解决这个问题，可以使用**双向链表**。即让节点都正确的指向对应的前驱和后继。从删除节点的角度来看，效率提高了，不需要再查找该及诶单的前驱节点。
 
 ## 排序
 
