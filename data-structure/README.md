@@ -808,7 +808,139 @@ pbook.showAll();
 // 清空了
 ```
 
+## 散列
 
+散列使用的数据结构叫做**散列表**。在散列表上插入、删除和取用数据都非常快，但是对于查找操作来说却效率低下。
+
+散列表是基于**数组**进行设计的。数组的长度是预先预定的，如有需要，可以随时增加。所有元素根据和该元素对应的键，保存在数组的特定位置。
+
+理想情况下，**散列函数会将每个键值映射为一个唯一的数组索引**。键的数量是无限的，但数组的长度是有限的。
+
+**即使使用一个高效的散列函数，仍然存在将两个键映射成同一个值的可能，这种现象称为碰撞(collision)**。
+
+散列表中的数组长度应该是一个**质数**。
+
+**散列函数**的选择依赖于键值的数据类型。如果键是整型，最简单的散列函数就是以数组的长度对键取余(**除留取余法**)。
+
+```typescript
+// 散列
+/**
+ * hashTable 数组长度一般设置为质数，例如设置为137，最简单的散列函数使用ASCII码值的和除以数组长度的余数
+ */
+class HashTable {
+  table = [];
+  constructor() {
+    this.table = new Array(137);
+  }
+
+  put(data) {
+    var pos = this.simpleHash(data);
+    this.table[pos] = data;
+  }
+
+  simpleHash(data) {
+    var total = 0;
+    for (var i = 0; i < data.length; i++) {
+      total += data.charCodeAt(i);
+    }
+    return total % this.table.length;
+  }
+
+  showDistro() {
+    var n = 0;
+    for (var i = 0; i < this.table.length; i++) {
+      if (this.table[i] != undefined) {
+        console.log(i + ': ' + this.table[i]);
+      }
+    }
+  }
+}
+
+var someNames = ['David', 'Jennifer', 'Donnie', 'Raymond', 'Cynthia', 'Mike', 'Clayton', 'Danny', 'Jonathan'];
+var hTable = new HashTable();
+for (var i = 0; i < someNames.length; i++) {
+  hTable.put(someNames[i]);
+}
+hTable.showDistro();
+// 35: Cynthia
+// 45: Clayton
+// 57: Donnie
+// 77: David
+// 95: Danny
+// 116: Mike
+// 132: Jennifer
+// 134: Jonathan
+
+// 发现，数据并不是均匀分布，人名向数组的两端集中
+// 并且初始数组中的人名并没有全部显示。
+// 原因是字符串"Clayton"和"Raymond"的散列值是一样的，产生了碰撞
+```
+
+**为了避免碰撞，首先要确保散列表中用来存储数据的数组其大小是个质数**。数组的长度应该在100以上，这是为了让数据在散列表中分布得更加均匀。试验发现，比100大且不会让数据产生碰撞的第一个质数是**137**。使用其他更接近100的质数，在该数据集上依然会产生碰撞。
+
+更好的散列函数可以使用霍纳算法，该算法仍然先计算字符串中各字符的ASCII码值，**求和时每次要乘以一个质数。**
+
+```typescript
+/**
+ * betterHash: 采用霍纳算法
+ */
+class HashTable {
+  table = [];
+  constructor() {
+    this.table = new Array(137);
+  }
+
+  put(data) {
+    var pos = this.betterHash(data);
+    this.table[pos] = data;
+  }
+
+  betterHash(data) {
+    var H = 37;
+    var total = 0;
+    for (var i = 0; i < data.length; i++) {
+      total = H * total + data.charCodeAt(i);
+    }
+    total = total % this.table.length;
+    if (total < 0) {
+      total += this.table.length - 1;
+    }
+    return total;
+  }
+
+  showDistro() {
+    var n = 0;
+    for (var i = 0; i < this.table.length; i++) {
+      if (this.table[i] != undefined) {
+        console.log(i + ': ' + this.table[i]);
+      }
+    }
+  }
+}
+
+var someNames = ['David', 'Jennifer', 'Donnie', 'Raymond', 'Cynthia', 'Mike', 'Clayton', 'Danny', 'Jonathan'];
+var hTable = new HashTable();
+for (var i = 0; i < someNames.length; i++) {
+  hTable.put(someNames[i]);
+}
+hTable.showDistro();
+// 10: Mike
+// 12: Danny
+// 72: David
+// 73: Jonathan
+// 88: Clayton
+// 92: Raymond
+// 104: Donnie
+// 109: Jennifer
+// 133: Cynthia
+```
+
+对于碰撞处理，有两种解决方法：**开链法**和**线性探测法**
+
+- 开链法：是指实现散列表的底层数组中，每个数组元素又是一个新的数据结构，比如里面为数组，就能存储多个键
+- 线性探测法：当发生碰撞时，线性探测法检查散列表中的下一个位置是否为空。如果为空，就将数据存入该位置；如果不为空，则继续检查下一个位置，直到找到一个空的位置为止
+
+当存储数据使用的数组特别大时，选择线性探测法要比开链法好。**如果数组的大小是待存储数据个数的1.5倍，那么使用开链法；如果数组的大小是待存储数据的两倍或两倍以上时，那么使用线性探测法。**
 
 ## 排序
 
