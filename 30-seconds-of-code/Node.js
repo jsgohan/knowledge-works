@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const consoleLog = fn => Promise.resolve().then(() => fn()).then(console.log);
 /**
  * atob: 对base64加密的数据解码
- * params: str
+ * @param str
  */
 const atob = str => Buffer.from(str, 'base64').toString('binary');
 
@@ -11,7 +11,7 @@ consoleLog(atob.bind(null, 'Zm9vYmFy')); // foobar
 
 /**
  * btoa: 创建base64加密字符串
- * params: str
+ * @param str
  */
 const btoa = str => Buffer.from(str, 'binary').toString('base64');
 
@@ -26,7 +26,7 @@ const createDirIfNotExists = dir => !fs.existsSync(dir) ? fs.mkdirSync(dir) : un
 
 /**
  * JSONToFile: 向文件中写入JSON
- * params: obj, filename
+ * @param obj, filename
  */
 const JSONToFile = (obj, filename) => fs.writeFile(`${filename}.json`, JSON.stringify(obj, null, 2));
 
@@ -34,7 +34,7 @@ const JSONToFile = (obj, filename) => fs.writeFile(`${filename}.json`, JSON.stri
 
 /**
  * readFileLines: 以数组的形式返回指定文件，每行为一个元素
- * params: filename
+ * @param filename
  */
 const readFileLines = filename => fs.readFileSync(filename).toString('UTF8').split('\n');
 

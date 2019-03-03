@@ -1,8 +1,8 @@
 const consoleLog = fn => Promise.resolve().then(() => fn()).then(console.log);
 /**
  * approximatelyEqual: 在规定的误差内近似相等
- * params: v1, v2, epsilon
- * return: bollean
+ * @param v1, v2, epsilon
+ * @return bollean
  */
 const approximatelyEqual = (v1, v2, epsilon = 0.001) => Math.abs(v1 - v2) < epsilon;
 
@@ -17,7 +17,7 @@ consoleLog(average.bind(null, ...[1, 2, 3])); // 2
 
 /**
  * distance: 两点之间的距离
- * params: x0，y0，x1，y1
+ * @param x0，y0，x1，y1
  */
 const distance = (x0, y0, x1, y1) => Math.hypot(x1 - x0, y1 - y0);
 
@@ -25,7 +25,7 @@ consoleLog(distance.bind(null, ...[1, 1, 2, 3])); // 2.23606797749979
 
 /**
  * geometricProgression: 返回范围内step^i的数组
- * params: end, start, step
+ * @param end, start, step
  */
 const geometricProgression = (end, start = 1, step = 2) => Array.from({ length: Math.floor(Math.log(end / start) / Math.log(step)) + 1}).map((v, i) => start * step ** i);
 
@@ -53,7 +53,7 @@ consoleLog(isPrime.bind(null, 11)); // true
 
 /**
  * maxBy: 返回数组中的最大值，自定义比较函数或比较属性
- * params: arr, fn
+ * @param arr, fn
  */
 const maxBy = (arr, fn) => Math.max(...arr.map(typeof fn === 'function' ? fn : val => val[fn]));
 

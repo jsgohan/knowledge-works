@@ -1,7 +1,7 @@
 const consoleLog = fn => Promise.resolve().then(() => fn()).then(console.log);
 /**
  * bind: 入参设置fn、context绑定二者执行
- * params: fn, context, args
+ * @param fn, context, args
  */
 const bind = (fn, context, ...boundArgs) => (...args) => fn.apply(context, [...boundArgs, ...args]);
 
@@ -14,7 +14,7 @@ console.log(freddyBound('hi', '!')); // hi fred!
 
 /**
  * bindKey: 入参context、函数名fn，和bind的区别于context对象里存在所有待绑定的值和方法
- * params: context, fn, args
+ * @param context, fn, args
  */
 const bindKey = (context, fn, ...boundArgs) => (...args) => context[fn].apply(context, [...boundArgs, ...args]);
 
@@ -72,7 +72,7 @@ Promise.resolve([5, 2])
 
 /**
  * converge: 收敛函数，用第二个参数数组计算出收敛函数需要的参数，最后执行
- * params: converger, fns[]
+ * @param converger, fns[]
  */
 const converge = (converger, fns) => (...args) => converger(...fns.map(fn => fn.apply(null, args)));
 
@@ -137,7 +137,7 @@ const throttle = (fn, wait) => {
 
 /**
  * delay: 直到等待时间后唤起fn执行
- * params: fn, wait, ...args
+ * @param fn, wait, ...args
  */
 const delay = (fn, wait, ...args) => setTimeout(fn, wait, ...args);
 
@@ -146,7 +146,7 @@ delay(text => console.log(text), 1000, 'later'); // later
 /**
  * hz: 用来记录每秒，fn执行iterations次数
  * performance为WebAPI 要在浏览器中运行使用
- * params: fn, iterations(循环执行次数)
+ * @param fn, iterations(循环执行次数)
  */
 const hz = (fn, iterations = 100) => {
   const before = performance.now();
@@ -160,7 +160,7 @@ const hz = (fn, iterations = 100) => {
 
 /**
  * memoize: 函数记忆
- * params: fn
+ * @param fn
  */
 const memoize = fn => {
   const cache = new Map();
@@ -188,7 +188,7 @@ console.log([1, 2, 3, 4, 5, 6].filter(negate(n => n % 2 === 0))); // [ 1, 3, 5 ]
 
 /**
  * once: 函数只执行一次
- * params: fn
+ * @param fn
  */
 const once = fn => {
   let called = false;
@@ -204,7 +204,7 @@ const once = fn => {
 
 /**
  * partial: 生成一个fn，先传入部分参数到回调，再执行回调函数传入剩余参数
- * params: fn, partials
+ * @param fn, partials
  */
 const partial = (fn, ...partials) => (...args) => fn(...partials, ...args);
 
@@ -269,7 +269,7 @@ middleFn();
 
 /**
  * getSingle: 单例模式
- * params: fn
+ * @param fn
  */
 const getSingle = function(fn) {
   let ret;

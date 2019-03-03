@@ -1,7 +1,8 @@
 /**
  * arrayToHtmlList: 往指定id的元素内追加li标签
- * params: arr, listID
- * return: element
+ * @param arr
+ * @param listID
+ * @return element
  */
 const arrayToHtmlList = (arr, listID) =>
   (el => (
@@ -13,7 +14,7 @@ const arrayToHtmlList = (arr, listID) =>
 
 /**
  * bottomVisible: 页面到底可见返回true，否则返回false
- * return: boolean
+ * @return boolean
  */
 const bottomVisible = () => document.documentElement.clientHeight + window.scrollY >= (document.documentElement.scrollHeight || document.documentElement.clientHeight);
 
@@ -21,7 +22,7 @@ const bottomVisible = () => document.documentElement.clientHeight + window.scrol
 
 /**
  * copyToClipboard: 拷贝文本到剪贴板
- * params: text
+ * @param text
  */
 const copyToClipboard = text => {
   const fakeElem = document.body.appendChild(document.createElement('textarea'));
@@ -43,7 +44,7 @@ const copyToClipboard = text => {
 
 /**
  * createElement: 为字符串创建元素
- * params: str
+ * @param str
  */
 const createElement = str => {
   const el = document.createElement('div');
@@ -102,7 +103,8 @@ const detectDeviceType = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobi
 
 /**
  * elementIsVisibleInViewport: 如果指定元素在可见区域返回true，否则返回false
- * params: el, partialVisible(boolean，决定是否全部可见)
+ * @param el
+ * @param partialVisible(boolean，决定是否全部可见)
  */
 const elementIsVisibleInViewport = (el, partialVisible = false) => {
   const { top, left, bottom, right} = el.getBoundingClientRect();
@@ -117,8 +119,9 @@ const elementIsVisibleInViewport = (el, partialVisible = false) => {
 
 /**
  * getImages: 获取指定元素内的所有图片src
- * params: el, includeDuplicates(boolean, 决定是否可以重复)
- * return: []
+ * @param el
+ * @param includeDuplicates(boolean, 决定是否可以重复)
+ * @return []
  */
 const getImages = (el, includeDuplicate = false) => {
   const images = [...el.getElementByTagName('img')].map(img => img.getAttribute('src'));
@@ -130,7 +133,7 @@ const getImages = (el, includeDuplicate = false) => {
 
 /**
  * getScrollPosition: 获取当前el的滚动条位置
- * params: el
+ * @param el
  */
 const getScrollPosition = (el = window) => ({
   x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
@@ -141,8 +144,9 @@ const getScrollPosition = (el = window) => ({
 
 /**
  * getStyle: 获取元素指定css样式的值
- * params: el, ruleName
- * return: val
+ * @param el
+ * @param ruleName
+ * @return val
  */
 const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
 
@@ -150,7 +154,9 @@ const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
 
 /**
  * setStyle: 设置css样式
- * params: el, ruleName, val
+ * @param el
+ * @param ruleName
+ * @param val
  */
 const setStyle = (el, ruleName, val) => el.style[ruleName] = val;
 
@@ -158,8 +164,9 @@ const setStyle = (el, ruleName, val) => el.style[ruleName] = val;
 
 /**
  * hasClass: 指定元素中包含指定样式返回true，否则false
- * params: el, className
- * return: boolean
+ * @param el
+ * @param className
+ * @return boolean
  */
 const hasClass = (el, className) => el.classList.contains(className);
 
@@ -174,8 +181,8 @@ const isBrowserTabFocused = () => !document.hidden;
 
 /**
  * nodeListToArray: 转换NodeList为数组
- * params: nodeList
- * return: []
+ * @param nodeList
+ * @return []
  */
 const nodeListToArray = nodeList => [...nodeList];
 
@@ -183,7 +190,9 @@ const nodeListToArray = nodeList => [...nodeList];
 
 /**
  * observeMutations: 为指定元素创建MutationObserver监听
- * params: element, callback, options
+ * @param element
+ * @param callback
+ * @param options
  */
 const observeMutations = (element, callback, options) => {
   const observer = new MutationObserver(mutations => mutations.forEach(m => callback(m)));
@@ -207,7 +216,10 @@ const observeMutations = (element, callback, options) => {
 /**
  * on: 添加事件监听
  * 方法中使用事件委托，若有目标元素，需要判断目标元素(opts.target)是否为el的孩子元素
- * params: el, evt, fn, opts
+ * @param el
+ * @param evt
+ * @param fn
+ * @param opts
  */
 const on = (el, evt, fn, opts = {}) => {
   const delegatorFn = e => e.target.matches(opts.target) && fn.call(e.target, e);
@@ -222,7 +234,10 @@ const on = (el, evt, fn, opts = {}) => {
 
 /**
  * off: 取消事件监听
- * params: el, evt, fn, opts
+ * @param el
+ * @param evt
+ * @param fn
+ * @param opts
  */
 const off = (el, evt, fn, opts = false) => el.removeEventListener(evt, fn, opts);
 
@@ -232,7 +247,9 @@ const off = (el, evt, fn, opts = false) => el.removeEventListener(evt, fn, opts)
 
 /**
  * triggerEvent: 给指定元素绑定自定义事件
- * params: el, eventType, detail
+ * @param el
+ * @param eventType
+ * @param detail
  */
 const triggerEvent = (el, eventType, detail) => el.dispatchEvent(new CustomEvent(eventType, { detail }));
 
@@ -241,7 +258,8 @@ const triggerEvent = (el, eventType, detail) => el.dispatchEvent(new CustomEvent
 
 /**
  * recordAnimationFrames: window.requestAnimationFrame()
- * params: callback, autoStart(为true，直接执行run，否则返回start和stop，交由用户操作)
+ * @param callback
+ * @param autoStart(为true，直接执行run，否则返回start和stop，交由用户操作)
  */
 const recordAnimationFrames = (callback, autoStart = true) => {
   let running = true, raf;
@@ -271,7 +289,8 @@ const recordAnimationFrames = (callback, autoStart = true) => {
 
 /**
  * redirect: 指定URL重定向
- * params: url, asLink(true代表链接点击跳转，false为HTTP重定向)
+ * @param url
+ * @param asLink(true代表链接点击跳转，false为HTTP重定向)
  */
 const redirect = (url, asLink = true) => {
   asLink ? (window.location.href = url) : window.location.replace(url);
@@ -282,7 +301,7 @@ const redirect = (url, asLink = true) => {
 /**
  * runAsync: 使用web worker创建一个独立线程，执行长时间函数不阻塞UI
  * 使用Blob对象创建一个blob url连接
- * params: fn
+ * @param fn
  */
 const runAsync = fn => {
   const worker = new Worker(
@@ -328,7 +347,7 @@ const scrollToTop = () => {
 
 /**
  * smoothScroll: 滚动指定元素到浏览器可见视区
- * params: el
+ * @param el
  */
 const smoothScroll = element => document.querySelector(element).scrollIntoView({ behavior: 'smooth' });
 
@@ -337,7 +356,8 @@ const smoothScroll = element => document.querySelector(element).scrollIntoView({
 
 /**
  * toggleClass: 指定元素class开关触发器
- * params: el, className
+ * @param el
+ * @param className
  */
 const toggleClass = (el, className) => el.classList.toggle(className);
 
