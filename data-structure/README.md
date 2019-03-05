@@ -1364,6 +1364,16 @@ console.log(nums.find(45));
 - 深度优先搜索 - 包括从一条路径的起始顶点开始追溯，直到到达最后一个顶点，然后回溯，继续追溯下一条路径，直到到达最后的顶点，如此往复，直到没有路径为止。
 - 广度优先搜索 - 从第一个顶点开始，尝试访问尽可能靠近它的顶点。本质上，这种搜索在图上是逐层移动的，首先检查最靠近第一个顶点的层，再逐渐向下移动到离起始顶点最远的层。
 
+### 查找最短路径
+
+图最常见的操作之一就是寻找从一个顶点到另一个顶点的最短路径。
+
+在执行广度优先搜索时，会自动查找从一个顶点到另一个相连顶点的最短路径。**可以通过修改广度优先搜索算法，找出最短路径。**
+
+### 拓扑排序
+
+拓扑排序会对有向图的所有顶点进行排序，使有向边从前面的顶点指向后面的顶点。
+
 ```typescript
 // 图
 /**
@@ -1398,6 +1408,7 @@ class Vertex {
   * @param adj 相邻顶点的邻接表数组
   * @param marked_dfs 用于深度优先搜索缓存已经访问过的顶点
   * @param marked_bfs 用于广度优先搜索缓存已经访问过的顶点
+  * @param edgeTo 记录从一个顶点到下一个顶点的所有边的映射
   */
 class Graph {
   vertices;
@@ -1405,6 +1416,7 @@ class Graph {
   adj = [];
   marked_dfs = [];
   marked_bfs = [];
+  edgeTo = [];
 
   constructor(v) {
     this.vertices = v;
@@ -1478,11 +1490,33 @@ class Graph {
       }
       for (var w = 0; w < this.adj[s].length; w++) {
         if (!this.marked_bfs[this.adj[s][w]]) {
+          // 增加下一行用于记录路径
+          this.edgeTo[this.adj[s][w]] = s;
           this.marked_bfs[this.adj[s][w]] = true;
           queue.push(this.adj[s][w]);
         }
       }
     }
+  }
+
+  /**
+   * pathTo: 用于展示图中连接到不同顶点的路径。创建一个栈，用来存储于指定顶点有共同边的所有顶点
+   * @param v 要达到的顶点
+   */
+  pathTo(v) {
+    var source = 0;
+    if (!this.hashPathTo(v)) return undefined;
+    var path = [];
+    for (var i = v; i != source; i = this.edgeTo[i]) path.push(i);
+    path.push(source);
+    return path;
+  }
+
+  /**
+   * hashPathTo: 用于判断该顶点是否已经广度优先查询过
+   */
+  hashPathTo(v) {
+    return this.marked_bfs[v];
   }
 }
 
@@ -1509,6 +1543,17 @@ g.bfs(0);
 // bfs Visited vertex: 2
 // bfs Visited vertex: 3
 // bfs Visited vertex: 4
+var paths = g.pathTo(4);
+var log = '';
+while (paths.length > 0) {
+  if (paths.length > 1) {
+    log += paths.pop() + '-';
+  } else {
+    log += paths.pop();
+  }
+}
+console.log(log);
+// 0-2-4
 ```
 
 ## 排序

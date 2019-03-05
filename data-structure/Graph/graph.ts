@@ -31,6 +31,7 @@ class Vertex {
   * @param adj 相邻顶点的邻接表数组
   * @param marked_dfs 用于深度优先搜索缓存已经访问过的顶点
   * @param marked_bfs 用于广度优先搜索缓存已经访问过的顶点
+  * @param edgeTo 记录从一个顶点到下一个顶点的所有边的映射
   */
 class Graph {
   vertices;
@@ -38,6 +39,7 @@ class Graph {
   adj = [];
   marked_dfs = [];
   marked_bfs = [];
+  edgeTo = [];
 
   constructor(v) {
     this.vertices = v;
@@ -111,11 +113,33 @@ class Graph {
       }
       for (var w = 0; w < this.adj[s].length; w++) {
         if (!this.marked_bfs[this.adj[s][w]]) {
+          // 增加下一行用于记录路径
+          this.edgeTo[this.adj[s][w]] = s;
           this.marked_bfs[this.adj[s][w]] = true;
           queue.push(this.adj[s][w]);
         }
       }
     }
+  }
+
+  /**
+   * pathTo: 用于展示图中连接到不同顶点的路径。创建一个栈，用来存储于指定顶点有共同边的所有顶点
+   * @param v 要达到的顶点
+   */
+  pathTo(v) {
+    var source = 0;
+    if (!this.hashPathTo(v)) return undefined;
+    var path = [];
+    for (var i = v; i != source; i = this.edgeTo[i]) path.push(i);
+    path.push(source);
+    return path;
+  }
+
+  /**
+   * hashPathTo: 用于判断该顶点是否已经广度优先查询过
+   */
+  hashPathTo(v) {
+    return this.marked_bfs[v];
   }
 }
 
@@ -142,3 +166,14 @@ g.bfs(0);
 // bfs Visited vertex: 2
 // bfs Visited vertex: 3
 // bfs Visited vertex: 4
+var paths = g.pathTo(4);
+var log = '';
+while (paths.length > 0) {
+  if (paths.length > 1) {
+    log += paths.pop() + '-';
+  } else {
+    log += paths.pop();
+  }
+}
+console.log(log);
+// 0-2-4
