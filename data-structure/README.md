@@ -1372,7 +1372,20 @@ console.log(nums.find(45));
 
 ### 拓扑排序
 
-拓扑排序会对有向图的所有顶点进行排序，使有向边从前面的顶点指向后面的顶点。
+对一个有向无环图(Directed Acyclic Graph,DAG)G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中任意一对顶点u和v，若边(u,v)∈E(G)，则u在线性序列中出现在v之前。
+
+拓扑排序对应施工的流程图具有特别重要的作用，它决定哪些子工程必须要先执行，哪些子工程要在某些工程执行后才可以执行。
+
+实现步骤：
+
+1. 在有向图中选一个没有前驱的顶点并且输出
+2. 删除所有和它有关的边
+3. 重复上述两步，直至所有顶点输出，或者当前图中不存在无前驱的顶点为止，后者代表有向图是有环的。
+
+有两种方法实现拓扑排序**Kahn算法**和**基于DFS的拓扑排序算法**
+
+1. Kahn算法- 先使用一个栈保存入度为0的顶点，然后输出栈顶元素并且将和栈顶元素有关的边删除，减少和栈顶元素有关的顶点的入度数量并且把入度减少到0的顶点也入栈。
+2. 基于DFS的拓扑排序算法 - 深度优先搜索，每次都沿着一条路径一直往下搜索，直到某个顶点没有了**出度**时，就停止递归，保存该顶点，回退到之前的顶点重新执行，**其实就是Kahn算法的逆过程，从出度的角度出发，从没有出度的顶点一直往上排序，倒序就是Kahn算法的结果**。
 
 ```typescript
 // 图
@@ -1406,9 +1419,11 @@ class Vertex {
   * @param vertices 顶点数
   * @param edges 边的数量
   * @param adj 相邻顶点的邻接表数组
-  * @param marked_dfs 用于深度优先搜索缓存已经访问过的顶点
-  * @param marked_bfs 用于广度优先搜索缓存已经访问过的顶点
+  * @param marked_dfs 用于深度优先搜索缓存已经访问过的顶点，true即为访问过
+  * @param marked_bfs 用于广度优先搜索缓存已经访问过的顶点，true即为访问过
   * @param edgeTo 记录从一个顶点到下一个顶点的所有边的映射
+  * @param marked_bfs_top_sort 用于基于DFS的拓扑排序，缓存已经访问过的顶点，true即为访问过
+  * @param stack 用于基于DFS的拓扑排序，按顺序缓存所有出度为0的顶点
   */
 class Graph {
   vertices;
@@ -1417,6 +1432,8 @@ class Graph {
   marked_dfs = [];
   marked_bfs = [];
   edgeTo = [];
+  marked_bfs_top_sort = [];
+  stack = [];
 
   constructor(v) {
     this.vertices = v;
@@ -1501,7 +1518,8 @@ class Graph {
 
   /**
    * pathTo: 用于展示图中连接到不同顶点的路径。创建一个栈，用来存储于指定顶点有共同边的所有顶点
-   * @param v 要达到的顶点
+   * 查找最短路径可以直接使用广度优先搜索算法来实现，广度优先搜索天然支持，先执行bfs()，再执行该方法遍历edgeTo数组找到最短路径
+   * @param v 要到达的顶点
    */
   pathTo(v) {
     var source = 0;
@@ -1517,6 +1535,32 @@ class Graph {
    */
   hashPathTo(v) {
     return this.marked_bfs[v];
+  }
+
+
+  /**
+   * topSortByDfs: 基于DFS的拓扑排序算法实现步骤
+   */
+  topSortByDfs() {
+    for (var i = 0; i < this.vertices; i++) this.marked_bfs_top_sort.push(false);
+    for (var i = 0; i < this.vertices; i++) {
+      if (!this.marked_bfs_top_sort[i]) this.topSortDFS(i);
+    }
+    for (var i = this.stack.length - 1; i >= 0; i--) console.log(`topSortByDfs: ${this.stack[i]}`);
+  }
+
+  /**
+   * topSortDFS: 该方法为dfs的变形，为了编写DFS拓扑排序算法实现的变形
+   * @param v 
+   */
+  topSortDFS(v) {
+    this.marked_bfs_top_sort[v] = true;
+    for (var w = 0; w < this.adj[v].length; w++) {
+      if (!this.marked_bfs_top_sort[this.adj[v][w]]) {
+        this.topSortDFS(this.adj[v][w]);
+      }
+    }
+    this.stack.push(v);
   }
 }
 
@@ -1554,6 +1598,12 @@ while (paths.length > 0) {
 }
 console.log(log);
 // 0-2-4
+g.topSortByDfs();
+// topSortByDfs: 0
+// topSortByDfs: 2
+// topSortByDfs: 4
+// topSortByDfs: 1
+// topSortByDfs: 3
 ```
 
 ## 排序
