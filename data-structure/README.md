@@ -1623,17 +1623,135 @@ g.topSortByDfs();
 
 排序算法方式很多，每种算法在上面所提到的评判标准都不一样，以下表格从网络中查找得到
 
-| 排序算法 | 平均时间复杂度 | 最好情况    | 最坏情况    | 空间复杂度 | 排序方式 | 稳定性 |
-| -------- | -------------- | ----------- | ----------- | ---------- | -------- | ------ |
-| 冒泡排序 | O(n^2)         | O(n)        | O(n^2)      | O(1)       |          | 稳定   |
-| 选择排序 | O(n^2)         | O(n^2)      | O(n^2)      | O(1)       |          | 不稳定 |
-| 插入排序 | O(n^2)         | O(n)        | O(n^2)      | O(1)       |          | 稳定   |
-| 希尔排序 | O(n*log n)     | O(n*log2 n) | O(n*log2 n) | O(1)       |          | 不稳定 |
-| 归并排序 | O(n*log n)     | O(n*log n)  | O(n*log n)  | O(n)       |          | 稳定   |
-| 快速排序 | O(n*log n)     | O(n*log n)  | O(n^2)      | O(log n)   |          | 不稳定 |
-| 堆排序   | O(n*log n)     | O(n*log n)  | O(n*log n)  | O(1)       |          | 不稳定 |
-| 计数排序 | O(n + k)       | O(n + k)    | O(n + k)    | O(k)       |          | 稳定   |
-| 桶排序   | O(n + k)       | O(n + k)    | O(n^2)      | O(k)       |          | 稳定   |
-| 基数排序 | O(n * k)       | O(n * k)    | O(n * k)    | O(n + k)   |          | 稳定   |
+| 排序算法 | 平均时间复杂度 | 最好情况    | 最坏情况    | 空间复杂度 | 排序方式  | 稳定性 |
+| -------- | -------------- | ----------- | ----------- | ---------- | --------- | ------ |
+| 冒泡排序 | O(n^2)         | O(n)        | O(n^2)      | O(1)       | In-place  | 稳定   |
+| 选择排序 | O(n^2)         | O(n^2)      | O(n^2)      | O(1)       | In-place  | 不稳定 |
+| 插入排序 | O(n^2)         | O(n)        | O(n^2)      | O(1)       | In-place  | 稳定   |
+| 希尔排序 | O(n*log n)     | O(n*log2 n) | O(n*log2 n) | O(1)       | In-place  | 不稳定 |
+| 归并排序 | O(n*log n)     | O(n*log n)  | O(n*log n)  | O(n)       | Out-place | 稳定   |
+| 快速排序 | O(n*log n)     | O(n*log n)  | O(n^2)      | O(log n)   | In-place  | 不稳定 |
+| 堆排序   | O(n*log n)     | O(n*log n)  | O(n*log n)  | O(1)       | In-place  | 不稳定 |
+| 计数排序 | O(n + k)       | O(n + k)    | O(n + k)    | O(k)       | Out-place | 稳定   |
+| 桶排序   | O(n + k)       | O(n + k)    | O(n^2)      | O(k)       | Out-place | 稳定   |
+| 基数排序 | O(n * k)       | O(n * k)    | O(n * k)    | O(n + k)   | Out-place | 稳定   |
+
+n: 数据规模 k: "桶"的个数 In-place: 占用常数内存，不占用额外内存 Out-place: 占用额外内存
 
 ![sort-algorithms](http://reyshieh.com/assets/sort-algorithms.png)
+
+### 基本排序算法
+
+#### 冒泡排序
+
+```typescript
+/**
+ * CArray: 通用数组测试对象，封装常规操作：插入新数据，显示数组数据及调用不同的排序算法
+ */
+class CArray {
+  dataStore = [];
+  pos = 0;
+  numElements;
+
+  constructor(numElements) {
+    this.numElements = numElements;
+    this.pos = this.numElements;
+  }
+
+  /**
+   * setData: 生成随机数组
+   */
+  setData() {
+    for (var i = 0; i < this.numElements; i++) {
+      this.dataStore[i] = Math.floor(Math.random() * (this.numElements + 1));
+    }
+  }
+
+  /**
+   * clear: 重置数组数据为0
+   */
+  clear() {
+    for (var i = 0; i < this.numElements; i++) {
+      this.dataStore[i] = 0;
+    }
+  }
+
+  /**
+   * insert: 插入新数据
+   * @param element 待插入数据
+   */
+  insert(element) {
+    this.dataStore[this.pos++] = element;
+  }
+
+  /**
+   * toString: 展示数组
+   */
+  toString() {
+    let restr = '';
+    for (let i = 0; i <= this.pos - 1; i++) {
+      restr += this.dataStore[i] + ' ';
+      if (i > 0 && i % 10 == 0) {
+        restr += '\n';
+      }
+    }
+    return restr;
+  }
+
+  /**
+   * swap: 交换数组元素
+   * @param arr 数组
+   * @param index1 交换位置1
+   * @param index2 交换位置2
+   */
+  swap(arr, index1, index2) {
+    let tmp = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = tmp;
+  }
+
+  /**
+   * bubbleSort: 冒泡排序是最慢的排序算法之一
+   * 第一层for循环确认需要遍历的数组中的数据个数，原因是每一轮的遍历都会冒泡出一个处在正确位置的数据，就不需要再对这个数据进行比较的操作
+   * 第二层for循环用于遍历第一层确认的个数的数组，做实际的排序
+   */
+  bubbleSort() {
+    for (var outer = this.pos; outer >= 2; outer--)
+      for (var inner = 0; inner < outer - 1; inner++) {
+        if (this.dataStore[inner] > this.dataStore[inner + 1]) {
+          this.swap(this.dataStore, inner, inner + 1);
+        }
+      }
+  }
+}
+
+const myNums = new CArray(10);
+myNums.setData();
+console.log(myNums.toString());
+myNums.bubbleSort();
+console.log('After BubbleSort:');
+console.log(myNums.toString());
+// 0 1 1 7 9 9 0 9 0 0
+// After BubbleSort:
+// 0 0 0 0 1 1 7 9 9 9
+
+```
+
+
+
+#### 选择排序
+
+#### 插入排序
+
+### 高级排序算法
+
+#### 希尔排序
+
+#### 归并排序
+
+#### 快速排序
+
+#### 堆排序
+
+#### 基数排序
+
