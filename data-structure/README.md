@@ -2278,7 +2278,41 @@ console.log(myNums.toString());
 
 #### 快速排序
 
+快速排序是处理大数据集最快的排序算法之一。通过递归的方式将数据依次分解为包含较大元素和较小元素的不同子序列。算法首先要选定基准值(pivot)。数据排序依据基准值进行。
 
+快速排序的算法如下：
+
+1. 选择一个基准元素，将列表分隔成两个子序列
+2. 对列表重新排序，将所有小于基准值的元素放在基准值前面，大于基准值的元素放在基准值的后面
+3. 分别对较小元素的子序列和较大元素的子序列重复步骤1和2
+
+但要注意，快速排序算法适用大数据集合，在处理小数据集时性能反而会下降
+
+```javascript
+// 快速排序
+var quickSort = function(list) {
+  if (list.length === 0) return [];
+  var lesser = [];
+  var greater = [];
+  var pivot = list[0]; // 基准值，比该值小的数存入lesser中，比该值大的数存入greater中
+  for (var i = 1; i < list.length; i++) {
+    if (list[i] < pivot) {
+      lesser.push(list[i]);
+    } else {
+      greater.push(list[i]);
+    }
+  }
+  return quickSort(lesser).concat(pivot, quickSort(greater));
+}
+
+var a = [];
+for (var i = 0; i < 10; i++) a[i] = Math.floor(Math.random() * 100) + 1;
+console.log(a);
+
+console.log(quickSort(a));
+// [ 57, 18, 99, 38, 15, 96, 3, 19, 76, 41 ]
+// [ 3, 15, 18, 19, 38, 41, 57, 76, 96, 99 ]
+```
 
 #### 堆排序
 
