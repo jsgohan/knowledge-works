@@ -2316,5 +2316,191 @@ console.log(quickSort(a));
 
 #### 堆排序
 
+#### 计数排序
+
+#### 桶排序
+
 #### 基数排序
 
+### 检索算法
+
+在列表中查找数据有两种方式: **顺序查找**和**二分查找**。顺序查找适用于元素随机排列的列表；二分查找适用于元素已排序的列表。二分查找效率更高，但必须在进行查找之前花费额外的时间将列表中的元素排序。
+
+#### 顺序查找
+
+顺序查找又称为线性查找。属于暴力查找技巧的一种，在执行查找时可能会访问到数据结构里的所有元素。
+
+##### 使用自组织数据
+
+对于未排序的数据集来说，当被查找的数据位于数据集的起始位置时，查找是最快、最成功的。通过将成功找到的元素置于数据集的起始位置，可以保证在以后的操作中该元素能被更快地查找到。
+
+"80-20原则"就是指对某一数据集执行的 80%的查找操作都是对其中20%的数据元素进行查找。自组织的方式最终会把这20%的数据置于数据集的起始位置，这样便可以通过一个简单的顺序查找快速找到它们。
+
+实现自组织，可以有多种方式
+
+**第一种，在查找数据时，将找到的数据与当前存储在上一个位置的数据进行交换**：
+
+```js
+function seqSearch(arr, data) {
+	for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === data) {
+            if (i > 0) {
+                swap(arr, i, i - 1);
+            }
+            return true;
+        }
+	}
+	return false;
+}
+
+function swap(arr, index, index1) {
+    temp = arr[index];
+    arr[index] = arr[index1];
+    arr[index1] = temp;
+}
+```
+
+**第二种，将找到的元素移动到数据集的起始位置，但是如果这个元素已经很接近起始位置，则不会对它的位置进行交换**，仅当数据位于数据集的前20%元素之外时，该数据才需要被重新移动到数据集的起始位置：
+
+```js
+function seqSerach(arr, data) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === data && i > (arr.length * 0.2)) {
+            swap(arr, i, 0);
+            return true;
+        } else if (arr[i] === data) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function swap(arr, index, index1) {
+    temp = arr[index];
+    arr[index] = arr[index1];
+    arr[index1] = temp;
+}
+```
+
+#### 二分查找算法
+
+```typescript
+// 二分查找
+/**
+ * CArray: 通用数组测试对象，封装常规操作：插入新数据，显示数组数据及调用不同的排序算法
+ */
+class CArray {
+  dataStore = [];
+  pos = 0;
+  numElements;
+
+  constructor(numElements) {
+    this.numElements = numElements;
+    this.pos = this.numElements;
+  }
+
+  /**
+   * setData: 生成随机数组
+   */
+  setData() {
+    for (var i = 0; i < this.numElements; i++) {
+      this.dataStore[i] = Math.floor(Math.random() * (this.numElements + 1));
+    }
+  }
+
+  getData() {
+    return this.dataStore;
+  }
+
+  /**
+   * clear: 重置数组数据为0
+   */
+  clear() {
+    for (var i = 0; i < this.numElements; i++) {
+      this.dataStore[i] = 0;
+    }
+  }
+
+  /**
+   * insert: 插入新数据
+   * @param element 待插入数据
+   */
+  insert(element) {
+    this.dataStore[this.pos++] = element;
+  }
+
+  /**
+   * toString: 展示数组
+   */
+  toString() {
+    let restr = '';
+    for (let i = 0; i <= this.pos - 1; i++) {
+      restr += this.dataStore[i] + ' ';
+      if (i > 0 && i % 10 == 0) {
+        restr += '\n';
+      }
+    }
+    return restr;
+  }
+
+  /**
+   * swap: 交换数组元素
+   * @param arr 数组
+   * @param index1 交换位置1
+   * @param index2 交换位置2
+   */
+  swap(arr, index1, index2) {
+    let tmp = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = tmp;
+  }
+
+  /**
+   * bubbleSort: 冒泡排序是最慢的排序算法之一
+   * 第一层for循环确认需要遍历的数组中的数据个数，原因是每一轮的遍历都会冒泡出一个处在正确位置的数据，就不需要再对这个数据进行比较的操作
+   * 第二层for循环用于遍历第一层确认的个数的数组，做实际的排序
+   */
+  bubbleSort() {
+    for (var outer = this.pos; outer >= 2; outer--)
+      for (var inner = 0; inner < outer - 1; inner++) {
+        if (this.dataStore[inner] > this.dataStore[inner + 1]) {
+          this.swap(this.dataStore, inner, inner + 1);
+        }
+      }
+  }
+
+  /**
+   * binSearch: 二分查找法
+   */
+  binSearch(arr, data) {
+    var upperBound = arr.length - 1;
+    var lowerBound = 0;
+    while (lowerBound <= upperBound) {
+      var mid = Math.floor((upperBound + lowerBound) / 2);
+      if (arr[mid] < data) {
+        lowerBound = mid + 1;
+      } else if (arr[mid] > data) {
+        upperBound = mid - 1;
+      } else {
+        return mid;
+      }
+    }
+    return -1;
+  }
+}
+
+const myNums = new CArray(10);
+myNums.setData();
+console.log(myNums.toString());
+myNums.bubbleSort();
+console.log('After BubbleSort:');
+console.log(myNums.toString());
+var retVal = myNums.binSearch(myNums.getData(), 2);
+if (retVal >= 0) {
+  console.log('Find...');
+} else {
+  console.log('Not find...')
+}
+```
+
+处理大数据集时二分查找要比顺序查找速度快
