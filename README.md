@@ -34,7 +34,7 @@
 - [ ] jianzhioffer
 - [ ] beautiful-code
 - [ ] functional-paradigm
-- [ ] leet-code
+- [x] leet-code
 - [ ] Introduction-to-Algorithms
 - [ ] Concrete-Mathematics
 - [ ] Deep-Learning
