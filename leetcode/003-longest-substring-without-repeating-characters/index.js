@@ -20,15 +20,17 @@
      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
  */
 
-function longest(str) {
+function longest(s) {
   var length = 0, start = 0, substr = '';
-  if (str.length === 1) return length = 1;
-  for (var i = 0; i < str.length; i++) {
-    substr += str[i];
-    if (substr.indexOf(str[i + 1]) > -1) {     
-      if (substr.length > length) length = substr.length;
-      start = start + substr.indexOf(str[i + 1]) + 1;
-      substr = substr.slice(substr.indexOf(str[i + 1]) + 1, substr.length);
+  if (s.length === 1) return length = 1;
+  for (var i = 0; i < s.length; i++) {
+    substr += s[i];
+    var flag = substr.indexOf(s[i + 1]);
+    var l = substr.length;
+    if (flag > -1) {
+      if (l > length) length = l;
+      start = start + flag + 1;
+      substr = substr.slice(flag + 1, l);
     }
   }
   return length < substr.length ? substr.length : length;
@@ -42,5 +44,5 @@ console.log(longest('aabaab!bb'));
 console.log(longest('aua'));
 
 // 运行结果
-// 执行用时 : 172 ms, 在Longest Substring Without Repeating Characters的JavaScript提交中击败了47.00% 的用户
+// 执行用时 : 140 ms, 在Longest Substring Without Repeating Characters的JavaScript提交中击败了64.68% 的用户
 // 内存消耗 : 40.8 MB, 在Longest Substring Without Repeating Characters的JavaScript提交中击败了6.90% 的用户
