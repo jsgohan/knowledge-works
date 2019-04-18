@@ -36,70 +36,25 @@
  *     this.left = this.right = null;
  * }
  */
-var current = 0;
-var result;
 /**
  * @param {TreeNode} root
  * @param {number} k
  * @return {number}
  */
 var kthSmallest = function(root, k) {
-  var tree;
-  for (var i = 0; i < root.length; i++) {
-    tree = insert(root[i], tree);
+  const res = [];
+  function inOrder(node) {
+    if (node) {
+      inOrder(node.left);
+      res.push(node.val);
+      inOrder(node.right);
+    }
   }
-  return inOrder(tree, k);
+  inOrder(root);
+  return res[k - 1];
 };
 
-function TreeNode(val) {
-  this.val = val;
-  this.left = this.right = null;
-}
+// 题目的意思是已经帮助我们实现了二叉树，在二叉树的基础上实现功能，采用中序遍历即可
 
-function insert(data, tree) {
-  var n = new TreeNode(data);
-  if (tree == null) {
-    if (data) tree = n;
-  } else {
-    var current = tree;
-    var parent;
-    if (data) {
-      while (true) {
-        parent = current;
-        if (data < current.val) {
-          current = current.left;
-          if (current == null) {
-            parent.left = n;
-            break;
-          }
-        } else {
-          current = current.right;
-          if (current == null) {
-            parent.right = n;
-            break;
-          }
-        }
-      }
-    }
-  }
-  return tree;
-}
-
-function inOrder(node, k) {
-  if (node != null && !result) {
-    result = inOrder(node.left, k);
-    current++;
-    if (current === k) {
-      return node.val;
-    }
-    result = inOrder(node.right, k);
-  }
-  return result;
-}
-
-// root = [5,3,6,2,4,null,null,1], k = 3
-// console.log(kthSmallest([5,3,6,2,4,null,null,1], 3));
-
-console.log(kthSmallest([3,1,4,null,2], 1));
-
-// console.log(kthSmallest([3,1,4,null,2], 1))
+// 执行用时 : 128 ms, 在Kth Smallest Element in a BST的JavaScript提交中击败了56.80% 的用户
+// 内存消耗 : 39.7 MB, 在Kth Smallest Element in a BST的JavaScript提交中击败了26.39% 的用户

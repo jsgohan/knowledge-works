@@ -18,5 +18,19 @@
  * @return {number[][]}
  */
 var threeSum = function(nums) {
-    
+  var result = [], nums = nums.sort((a, b) => a - b);
+  for (var i = 0; i <= nums.length; i++)
+    for (var j = i + 1; j <= nums.length; j++)
+      for (var k = j + 1; k <= nums.length; k++) {
+        if (nums[i] + nums[j] + nums[k] === 0) {
+          var n = [nums[i], nums[j], nums[k]];
+          if (!result.find(r => r[0] == n[0] && r[1] == n[1] && r[2] == n[2])) {
+            result.push(n);
+          }
+        }
+      }
+  return result;
 };
+
+console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+
